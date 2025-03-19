@@ -1,5 +1,7 @@
 #pragma once
 
+#include "JaroliftCommon.h"
+
 void jaroCmdSetDevCnt(uint16_t value);
 void jaroCmdReInit();
 bool getCC1101State();
@@ -18,15 +20,15 @@ struct JaroCommand {
   union {
     struct {
       JaroCmdType type;
-      uint8_t channel;
+      RemoteAndChannel remoteAndChannel;
     } single;
     struct {
       JaroCmdGrpType type;
-      uint16_t group_mask;
+      RemoteAndGroupMask remoteAndGroupMask;
     } group;
     struct {
       JaroCmdSrvType type;
-      uint8_t channel;
+      RemoteAndChannel remoteAndChannel;
     } service;
   };
 };

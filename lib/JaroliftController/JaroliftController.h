@@ -4,6 +4,7 @@
 
 #include "KeeloqLib.h"
 #include "cc1101.h"
+#include "JaroliftCommon.h"
 #include <Arduino.h>
 #include <EEPROM.h>
 #include <nvs.h>
@@ -22,7 +23,6 @@ public:
   };
 
   struct Config {
-    uint32_t serial;
     bool learnMode;
     unsigned long masterMSB;
     unsigned long masterLSB;
@@ -45,22 +45,21 @@ public:
   void loop();
 
   // Einzelbefehle
-  void cmdChannel(commands cmd, uint8_t channel);
+  void cmdChannel(commands cmd, const RemoteAndChannel& remoteAndChannel);
 
   // Gruppenbefehle
-  void cmdGroup(commands cmd, uint16_t groupMask);
+  void cmdGroup(commands cmd, const RemoteAndGroupMask& remoteAndGroupMask);
 
   // Service Commands
-  void cmdLearn(uint8_t channel);
-  void cmdUnlearn(uint8_t channel);
-  void cmdSetEndPointUp(uint8_t channel);
-  void cmdDeleteEndPointUp(uint8_t channel);
-  void cmdSetEndPointDown(uint8_t channel);
-  void cmdDeleteEndPointDown(uint8_t channel);
+  void cmdLearn(const RemoteAndChannel& remoteAndChannel);
+  void cmdUnlearn(const RemoteAndChannel& remoteAndChannel);
+  void cmdSetEndPointUp(const RemoteAndChannel& remoteAndChannel);
+  void cmdDeleteEndPointUp(const RemoteAndChannel& remoteAndChannel);
+  void cmdSetEndPointDown(const RemoteAndChannel& remoteAndChannel);
+  void cmdDeleteEndPointDown(const RemoteAndChannel& remoteAndChannel);
 
   // Konfigurationssetter
   void setGPIO(int sck, int miso, int mosi, int cs, int gdo0, int gdo2);
-  void setBaseSerial(uint32_t serial);
   void setLegacyLearnMode(bool legacyMode);
   void setKeys(unsigned long masterMSB, unsigned long masterLSB);
   void setRemoteCallback(void (*callback)(uint32_t serial, int8_t function, uint16_t channel)) { remoteCallback = callback; }
@@ -68,7 +67,7 @@ public:
   // Hilfsfunktionen
   uint16_t getDeviceCounter();
   void setDeviceCounter(uint16_t newDevCnt);
-  uint32_t getSerial(uint8_t channel);
+  uint32_t getSerial(uint32_t remoteSerial, uint8_t channel);
   bool getCC1101State();
   uint8_t getRssi();
 

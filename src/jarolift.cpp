@@ -151,7 +151,7 @@ void mqttSendRemote(uint32_t serial, int8_t function, uint16_t channel) {
  * *******************************************************************/
 void jaroCmd(JaroCmdType type, uint8_t channel) {
   if (jaroCmdQueue.size() < MAX_CMD) {
-    jaroCmdQueue.push({JaroCommand::SINGLE, {.single = {type, channel}}});
+    jaroCmdQueue.push({JaroCommand::SINGLE, {.single = {type, RemoteAndChannel(0, config.jaro.serial, channel)}}});
     ESP_LOGD(TAG, "add single cmd to buffer: %i, %i", type, channel + 1);
   } else {
     ESP_LOGE(TAG, "too many commands within too short time");
@@ -160,7 +160,7 @@ void jaroCmd(JaroCmdType type, uint8_t channel) {
 
 void jaroCmd(JaroCmdGrpType type, uint16_t group_mask) {
   if (jaroCmdQueue.size() < MAX_CMD) {
-    jaroCmdQueue.push({JaroCommand::GROUP, {.group = {type, group_mask}}});
+    jaroCmdQueue.push({JaroCommand::GROUP, {.group = {type, RemoteAndGroupMask(0, config.jaro.serial, group_mask)}}});
     ESP_LOGD(TAG, "add group cmd to buffer: %i, %04X", type, group_mask);
   } else {
     ESP_LOGE(TAG, "too many commands within too short time");
@@ -169,7 +169,7 @@ void jaroCmd(JaroCmdGrpType type, uint16_t group_mask) {
 
 void jaroCmd(JaroCmdSrvType type, uint8_t channel) {
   if (jaroCmdQueue.size() < MAX_CMD) {
-    jaroCmdQueue.push({JaroCommand::SERVICE, {.service = {type, channel}}});
+    jaroCmdQueue.push({JaroCommand::SERVICE, {.service = {type, RemoteAndChannel(0, config.jaro.serial, channel)}}});
     ESP_LOGD(TAG, "add service cmd to buffer: %i, %i", type, channel + 1);
   } else {
     ESP_LOGE(TAG, "too many commands within too short time");
@@ -188,7 +188,6 @@ void jaroliftSetup() {
   ESP_LOGI(TAG, "initializing the CC1101 Transceiver");
   jarolift.setGPIO(config.gpio.sck, config.gpio.miso, config.gpio.mosi, config.gpio.cs, config.gpio.gdo0, config.gpio.gdo2);
   jarolift.setKeys(config.jaro.masterMSB, config.jaro.masterLSB);
-  jarolift.setBaseSerial(config.jaro.serial);
   jarolift.begin();
 
   if (jarolift.getCC1101State()) {
@@ -221,76 +220,76 @@ void processJaroCommands() {
     if (cmd.cmdType == JaroCommand::SINGLE) {
       switch (cmd.single.type) {
       case CMD_UP:
-        jarolift.cmdChannel(JaroliftController::CMD_UP, cmd.single.channel);
-        mqttSendPosition(cmd.single.channel, POS_OPEN);
-        ESP_LOGI(TAG, "execute cmd: UP - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdChannel(JaroliftController::CMD_UP, cmd.single.remoteAndChannel);
+        mqttSendPosition(cmd.single.remoteAndChannel.channel, POS_OPEN);
+        ESP_LOGI(TAG, "execute cmd: UP - channel: %i", cmd.single.remoteAndChannel.channel + 1);
         break;
       case CMD_DOWN:
-        jarolift.cmdChannel(JaroliftController::CMD_DOWN, cmd.single.channel);
-        mqttSendPosition(cmd.single.channel, POS_CLOSE);
-        ESP_LOGI(TAG, "execute cmd: DOWN - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdChannel(JaroliftController::CMD_DOWN, cmd.single.remoteAndChannel);
+        mqttSendPosition(cmd.single.remoteAndChannel.channel, POS_CLOSE);
+        ESP_LOGI(TAG, "execute cmd: DOWN - channel: %i", cmd.single.remoteAndChannel.channel + 1);
         break;
       case CMD_STOP:
-        jarolift.cmdChannel(JaroliftController::CMD_STOP, cmd.single.channel);
-        ESP_LOGI(TAG, "execute cmd: STOP - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdChannel(JaroliftController::CMD_STOP, cmd.single.remoteAndChannel);
+        ESP_LOGI(TAG, "execute cmd: STOP - channel: %i", cmd.single.remoteAndChannel.channel + 1);
         break;
       case CMD_SET_SHADE:
-        jarolift.cmdChannel(JaroliftController::CMD_SET_SHADE, cmd.single.channel);
-        mqttSendPosition(cmd.single.channel, POS_SHADE);
-        ESP_LOGI(TAG, "execute cmd: SETSHADE - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdChannel(JaroliftController::CMD_SET_SHADE, cmd.single.remoteAndChannel);
+        mqttSendPosition(cmd.single.remoteAndChannel.channel, POS_SHADE);
+        ESP_LOGI(TAG, "execute cmd: SETSHADE - channel: %i", cmd.single.remoteAndChannel.channel + 1);
         break;
       case CMD_SHADE:
-        jarolift.cmdChannel(JaroliftController::CMD_SHADE, cmd.single.channel);
-        ESP_LOGI(TAG, "execute cmd: SHADE - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdChannel(JaroliftController::CMD_SHADE, cmd.single.remoteAndChannel);
+        ESP_LOGI(TAG, "execute cmd: SHADE - channel: %i", cmd.single.remoteAndChannel.channel + 1);
         break;
       }
     } else if (cmd.cmdType == JaroCommand::GROUP) {
       switch (cmd.group.type) {
       case CMD_GRP_UP:
-        jarolift.cmdGroup(JaroliftController::CMD_UP, cmd.group.group_mask);
-        ESP_LOGI(TAG, "execute group cmd: UP - mask: %04X", cmd.group.group_mask);
-        mqttSendPositionGroup(cmd.group.group_mask, POS_OPEN);
+        jarolift.cmdGroup(JaroliftController::CMD_UP, cmd.group.remoteAndGroupMask);
+        ESP_LOGI(TAG, "execute group cmd: UP - mask: %04X", cmd.group.remoteAndGroupMask.groupMask);
+        mqttSendPositionGroup(cmd.group.remoteAndGroupMask.groupMask, POS_OPEN);
         break;
       case CMD_GRP_DOWN:
-        jarolift.cmdGroup(JaroliftController::CMD_DOWN, cmd.group.group_mask);
-        ESP_LOGI(TAG, "execute group cmd: DOWN - mask: %04X", cmd.group.group_mask);
-        mqttSendPositionGroup(cmd.group.group_mask, POS_CLOSE);
+        jarolift.cmdGroup(JaroliftController::CMD_DOWN, cmd.group.remoteAndGroupMask);
+        ESP_LOGI(TAG, "execute group cmd: DOWN - mask: %04X", cmd.group.remoteAndGroupMask.groupMask);
+        mqttSendPositionGroup(cmd.group.remoteAndGroupMask.groupMask, POS_CLOSE);
         break;
       case CMD_GRP_STOP:
-        jarolift.cmdGroup(JaroliftController::CMD_STOP, cmd.group.group_mask);
-        ESP_LOGI(TAG, "execute group cmd: STOP - mask: %04X", cmd.group.group_mask);
+        jarolift.cmdGroup(JaroliftController::CMD_STOP, cmd.group.remoteAndGroupMask);
+        ESP_LOGI(TAG, "execute group cmd: STOP - mask: %04X", cmd.group.remoteAndGroupMask.groupMask);
         break;
       case CMD_GRP_SHADE:
-        jarolift.cmdGroup(JaroliftController::CMD_SHADE, cmd.group.group_mask);
-        mqttSendPositionGroup(cmd.group.group_mask, POS_SHADE);
-        ESP_LOGI(TAG, "execute group cmd: SHADE - mask: %04X", cmd.group.group_mask);
+        jarolift.cmdGroup(JaroliftController::CMD_SHADE, cmd.group.remoteAndGroupMask);
+        mqttSendPositionGroup(cmd.group.remoteAndGroupMask.groupMask, POS_SHADE);
+        ESP_LOGI(TAG, "execute group cmd: SHADE - mask: %04X", cmd.group.remoteAndGroupMask.groupMask);
         break;
       }
     } else if (cmd.cmdType == JaroCommand::SERVICE) {
       switch (cmd.service.type) {
       case CMD_LEARN:
-        jarolift.cmdLearn(cmd.service.channel);
-        ESP_LOGI(TAG, "execute service cmd: CMD_LEARN - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdLearn(cmd.service.remoteAndChannel);
+        ESP_LOGI(TAG, "execute service cmd: CMD_LEARN - channel: %i", cmd.service.remoteAndChannel.channel + 1);
         break;
       case CMD_UNLEARN:
-        jarolift.cmdUnlearn(cmd.service.channel);
-        ESP_LOGI(TAG, "execute service cmd: CMD_UNLEARN - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdUnlearn(cmd.service.remoteAndChannel);
+        ESP_LOGI(TAG, "execute service cmd: CMD_UNLEARN - channel: %i", cmd.service.remoteAndChannel.channel + 1);
         break;
       case CMD_SET_END_POINT_UP:
-        jarolift.cmdSetEndPointUp(cmd.service.channel);
-        ESP_LOGI(TAG, "execute service cmd: SET_END_POINT_UP - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdSetEndPointUp(cmd.service.remoteAndChannel);
+        ESP_LOGI(TAG, "execute service cmd: SET_END_POINT_UP - channel: %i", cmd.service.remoteAndChannel.channel + 1);
         break;
       case CMD_DEL_END_POINT_UP:
-        jarolift.cmdDeleteEndPointUp(cmd.service.channel);
-        ESP_LOGI(TAG, "execute service cmd: CMD_DEL_END_POINT_UP - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdDeleteEndPointUp(cmd.service.remoteAndChannel);
+        ESP_LOGI(TAG, "execute service cmd: CMD_DEL_END_POINT_UP - channel: %i", cmd.service.remoteAndChannel.channel + 1);
         break;
       case CMD_SET_END_POINT_DOWN:
-        jarolift.cmdSetEndPointDown(cmd.service.channel);
-        ESP_LOGI(TAG, "execute service cmd: SET_END_POINT_DOWN - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdSetEndPointDown(cmd.service.remoteAndChannel);
+        ESP_LOGI(TAG, "execute service cmd: SET_END_POINT_DOWN - channel: %i", cmd.service.remoteAndChannel.channel + 1);
         break;
       case CMD_DEL_END_POINT_DOWN:
-        jarolift.cmdDeleteEndPointDown(cmd.service.channel);
-        ESP_LOGI(TAG, "execute service cmd: CMD_DEL_END_POINT_DOWN - channel: %i", cmd.single.channel + 1);
+        jarolift.cmdDeleteEndPointDown(cmd.service.remoteAndChannel);
+        ESP_LOGI(TAG, "execute service cmd: CMD_DEL_END_POINT_DOWN - channel: %i", cmd.service.remoteAndChannel.channel + 1);
         break;
       }
     }
