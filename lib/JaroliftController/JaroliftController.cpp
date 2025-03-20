@@ -91,7 +91,7 @@ bool JaroliftController::getCC1101State() { return cc1101_.connected(); }
  * @return  none
  * *******************************************************************/
 uint16_t JaroliftController::getDeviceCounter() {
-  // TODO load the device counter by evaluating the remoteNumber in the RemoteAndChannel.
+  // TODO load the device counter by evaluating the remoteNumber in the JaroCommandTarget.
 
   nvs_handle_t nvsHandle;
   esp_err_t err = nvs_open("device_data", NVS_READWRITE, &nvsHandle);
@@ -123,7 +123,7 @@ uint16_t JaroliftController::getDeviceCounter() {
  * @return  none
  * *******************************************************************/
 void JaroliftController::setDeviceCounter(uint16_t newDevCnt) {
-  // TODO save the device counter by evaluating the remoteNumber in the RemoteAndChannel.
+  // TODO save the device counter by evaluating the remoteNumber in the JaroCommandTarget.
 
   devCount_ = newDevCnt;
   nvs_handle_t nvsHandle;
@@ -404,16 +404,16 @@ void JaroliftController::handleRadioRxMeasure() {
  * @param   cmd, channel
  * @return  none
  * *******************************************************************/
-void JaroliftController::cmdChannel(commands cmd, const RemoteAndChannel& remoteAndChannel) {
+void JaroliftController::cmdChannel(commands cmd, const JaroCommandTarget& target) {
   if (!initOK_)
     return;
-  newSerial_ = getSerial(remoteAndChannel.serial, remoteAndChannel.channel);
+  newSerial_ = getSerial(target.serial, target.channel);
 
   switch (cmd) {
   case CMD_UP:
     button_ = FCT_CODE_UP;
-    discL_ = discLowArr_[remoteAndChannel.channel];
-    discH_ = discHighArr_[remoteAndChannel.channel];
+    discL_ = discLowArr_[target.channel];
+    discH_ = discHighArr_[target.channel];
     disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
     generateKey();
     generateEncrypted();
@@ -425,8 +425,8 @@ void JaroliftController::cmdChannel(commands cmd, const RemoteAndChannel& remote
 
   case CMD_DOWN:
     button_ = FCT_CODE_DOWN;
-    discL_ = discLowArr_[remoteAndChannel.channel];
-    discH_ = discHighArr_[remoteAndChannel.channel];
+    discL_ = discLowArr_[target.channel];
+    discH_ = discHighArr_[target.channel];
     disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
     generateKey();
     generateEncrypted();
@@ -438,8 +438,8 @@ void JaroliftController::cmdChannel(commands cmd, const RemoteAndChannel& remote
 
   case CMD_STOP:
     button_ = FCT_CODE_STOP;
-    discL_ = discLowArr_[remoteAndChannel.channel];
-    discH_ = discHighArr_[remoteAndChannel.channel];
+    discL_ = discLowArr_[target.channel];
+    discH_ = discHighArr_[target.channel];
     disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
     generateKey();
     generateEncrypted();
@@ -451,8 +451,8 @@ void JaroliftController::cmdChannel(commands cmd, const RemoteAndChannel& remote
 
   case CMD_SHADE:
     button_ = FCT_CODE_STOP;
-    discL_ = discLowArr_[remoteAndChannel.channel];
-    discH_ = discHighArr_[remoteAndChannel.channel];
+    discL_ = discLowArr_[target.channel];
+    discH_ = discHighArr_[target.channel];
     disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
     generateKey();
     generateEncrypted();
@@ -464,8 +464,8 @@ void JaroliftController::cmdChannel(commands cmd, const RemoteAndChannel& remote
 
   case CMD_SET_SHADE:
     button_ = FCT_CODE_STOP;
-    discL_ = discLowArr_[remoteAndChannel.channel];
-    discH_ = discHighArr_[remoteAndChannel.channel];
+    discL_ = discLowArr_[target.channel];
+    discH_ = discHighArr_[target.channel];
     disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
     generateKey();
     // send 4-times STOP
@@ -490,11 +490,11 @@ void JaroliftController::cmdChannel(commands cmd, const RemoteAndChannel& remote
  * @param   cmd, channel
  * @return  none
  * *******************************************************************/
-void JaroliftController::cmdGroup(commands cmd, const RemoteAndGroupMask& remoteAndGroupMask) {
+void JaroliftController::cmdGroup(commands cmd, const JaroCommandTarget& target) {
   if (!initOK_)
     return;
   devCount_ = getDeviceCounter();
-  newSerial_ = getSerial(remoteAndGroupMask.serial, 0);
+  newSerial_ = getSerial(target.serial, 0);
 
   switch (cmd) {
   case CMD_UP:
@@ -514,8 +514,8 @@ void JaroliftController::cmdGroup(commands cmd, const RemoteAndGroupMask& remote
     break;
   }
 
-  discL_ = remoteAndGroupMask.groupMask & 0x00FF;
-  discH_ = (remoteAndGroupMask.groupMask >> 8) & 0x00FF;
+  discL_ = target.groupMask & 0x00FF;
+  discH_ = (target.groupMask >> 8) & 0x00FF;
   disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
   generateKey();
   generateEncrypted();
@@ -536,15 +536,15 @@ void JaroliftController::cmdGroup(commands cmd, const RemoteAndGroupMask& remote
  * @param   channel
  * @return  none
  * *******************************************************************/
-void JaroliftController::cmdLearn(const RemoteAndChannel& remoteAndChannel) {
+void JaroliftController::cmdLearn(const JaroCommandTarget& target) {
   if (!initOK_)
     return;
-  newSerial_ = getSerial(remoteAndChannel.serial, remoteAndChannel.channel);
+  newSerial_ = getSerial(target.serial, target.channel);
   devCount_ = getDeviceCounter();
   ESP_LOGD(TAG, "learn | Device Counter: %d | Serial: 0x%08llx", devCount_, newSerial_);
   button_ = config_.learnMode ? 0xA : 0x1;
-  discL_ = discLowArr_[remoteAndChannel.channel];
-  discH_ = discHighArr_[remoteAndChannel.channel];
+  discL_ = discLowArr_[target.channel];
+  discH_ = discHighArr_[target.channel];
   disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
   generateKey();
   generateEncrypted();
@@ -570,14 +570,14 @@ void JaroliftController::cmdLearn(const RemoteAndChannel& remoteAndChannel) {
  * @param   channel
  * @return  none
  * *******************************************************************/
-void JaroliftController::cmdUnlearn(const RemoteAndChannel& remoteAndChannel) {
+void JaroliftController::cmdUnlearn(const JaroCommandTarget& target) {
   if (!initOK_)
     return;
-  newSerial_ = getSerial(remoteAndChannel.serial, remoteAndChannel.channel);
+  newSerial_ = getSerial(target.serial, target.channel);
   devCount_ = getDeviceCounter();
   ESP_LOGD(TAG, "unlearn | Device Counter: %d | Serial: 0x%08llx", devCount_, newSerial_);
-  discL_ = discLowArr_[remoteAndChannel.channel];
-  discH_ = discHighArr_[remoteAndChannel.channel];
+  discL_ = discLowArr_[target.channel];
+  discH_ = discHighArr_[target.channel];
   disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
   generateKey();
   generateEncrypted();
@@ -612,14 +612,14 @@ void JaroliftController::cmdUnlearn(const RemoteAndChannel& remoteAndChannel) {
  * @param   channel
  * @return  none
  * *******************************************************************/
-void JaroliftController::cmdSetEndPointUp(const RemoteAndChannel& remoteAndChannel) {
+void JaroliftController::cmdSetEndPointUp(const JaroCommandTarget& target) {
   if (!initOK_)
     return;
-  newSerial_ = getSerial(remoteAndChannel.serial, remoteAndChannel.channel);
+  newSerial_ = getSerial(target.serial, target.channel);
   devCount_ = getDeviceCounter();
   ESP_LOGD(TAG, "set upper end point | Device Counter: %d | Serial: 0x%08llx", devCount_, newSerial_);
-  discL_ = discLowArr_[remoteAndChannel.channel];
-  discH_ = discHighArr_[remoteAndChannel.channel];
+  discL_ = discLowArr_[target.channel];
+  discH_ = discHighArr_[target.channel];
   disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
   generateKey();
   generateEncrypted();
@@ -653,14 +653,14 @@ void JaroliftController::cmdSetEndPointUp(const RemoteAndChannel& remoteAndChann
  * @param   channel
  * @return  none
  * *******************************************************************/
-void JaroliftController::cmdDeleteEndPointUp(const RemoteAndChannel& remoteAndChannel) {
+void JaroliftController::cmdDeleteEndPointUp(const JaroCommandTarget& target) {
   if (!initOK_)
     return;
-  newSerial_ = getSerial(remoteAndChannel.serial, remoteAndChannel.channel);
+  newSerial_ = getSerial(target.serial, target.channel);
   devCount_ = getDeviceCounter();
   ESP_LOGD(TAG, "delete upper end point | Device Counter: %d | Serial: 0x%08llx", devCount_, newSerial_);
-  discL_ = discLowArr_[remoteAndChannel.channel];
-  discH_ = discHighArr_[remoteAndChannel.channel];
+  discL_ = discLowArr_[target.channel];
+  discH_ = discHighArr_[target.channel];
   disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
   generateKey();
   generateEncrypted();
@@ -694,14 +694,14 @@ void JaroliftController::cmdDeleteEndPointUp(const RemoteAndChannel& remoteAndCh
  * @param   channel
  * @return  none
  * *******************************************************************/
-void JaroliftController::cmdSetEndPointDown(const RemoteAndChannel& remoteAndChannel) {
+void JaroliftController::cmdSetEndPointDown(const JaroCommandTarget& target) {
   if (!initOK_)
     return;
-  newSerial_ = getSerial(remoteAndChannel.serial, remoteAndChannel.channel);
+  newSerial_ = getSerial(target.serial, target.channel);
   devCount_ = getDeviceCounter();
   ESP_LOGD(TAG, "set lower end point | Device Counter: %d | Serial: 0x%08llx", devCount_, newSerial_);
-  discL_ = discLowArr_[remoteAndChannel.channel];
-  discH_ = discHighArr_[remoteAndChannel.channel];
+  discL_ = discLowArr_[target.channel];
+  discH_ = discHighArr_[target.channel];
   disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
   generateKey();
   generateEncrypted();
@@ -735,14 +735,14 @@ void JaroliftController::cmdSetEndPointDown(const RemoteAndChannel& remoteAndCha
  * @param   channel
  * @return  none
  * *******************************************************************/
-void JaroliftController::cmdDeleteEndPointDown(const RemoteAndChannel& remoteAndChannel) {
+void JaroliftController::cmdDeleteEndPointDown(const JaroCommandTarget& target) {
   if (!initOK_)
     return;
-  newSerial_ = getSerial(remoteAndChannel.serial, remoteAndChannel.channel);
+  newSerial_ = getSerial(target.serial, target.channel);
   devCount_ = getDeviceCounter();
   ESP_LOGD(TAG, "delete lower end point | Device Counter: %d | Serial: 0x%08llx", devCount_, newSerial_);
-  discL_ = discLowArr_[remoteAndChannel.channel];
-  discH_ = discHighArr_[remoteAndChannel.channel];
+  discL_ = discLowArr_[target.channel];
+  discH_ = discHighArr_[target.channel];
   disc_ = (discL_ << 8) | (newSerial_ & 0xFF);
   generateKey();
   generateEncrypted();

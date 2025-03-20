@@ -45,18 +45,18 @@ public:
   void loop();
 
   // Einzelbefehle
-  void cmdChannel(commands cmd, const RemoteAndChannel& remoteAndChannel);
+  void cmdChannel(commands cmd, const JaroCommandTarget& target);
 
   // Gruppenbefehle
-  void cmdGroup(commands cmd, const RemoteAndGroupMask& remoteAndGroupMask);
+  void cmdGroup(commands cmd, const JaroCommandTarget& target);
 
   // Service Commands
-  void cmdLearn(const RemoteAndChannel& remoteAndChannel);
-  void cmdUnlearn(const RemoteAndChannel& remoteAndChannel);
-  void cmdSetEndPointUp(const RemoteAndChannel& remoteAndChannel);
-  void cmdDeleteEndPointUp(const RemoteAndChannel& remoteAndChannel);
-  void cmdSetEndPointDown(const RemoteAndChannel& remoteAndChannel);
-  void cmdDeleteEndPointDown(const RemoteAndChannel& remoteAndChannel);
+  void cmdLearn(const JaroCommandTarget& target);
+  void cmdUnlearn(const JaroCommandTarget& target);
+  void cmdSetEndPointUp(const JaroCommandTarget& target);
+  void cmdDeleteEndPointUp(const JaroCommandTarget& target);
+  void cmdSetEndPointDown(const JaroCommandTarget& target);
+  void cmdDeleteEndPointDown(const JaroCommandTarget& target);
 
   // Konfigurationssetter
   void setGPIO(int sck, int miso, int mosi, int cs, int gdo0, int gdo2);

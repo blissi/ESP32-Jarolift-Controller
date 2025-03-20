@@ -17,18 +17,18 @@ enum JaroCmdSrvType { CMD_LEARN, CMD_UNLEARN, CMD_SET_END_POINT_UP, CMD_DEL_END_
 
 struct JaroCommand {
   enum CommandType { SINGLE, GROUP, SERVICE } cmdType;
+
+  JaroCommandTarget target;
+  
   union {
     struct {
       JaroCmdType type;
-      RemoteAndChannel remoteAndChannel;
     } single;
     struct {
       JaroCmdGrpType type;
-      RemoteAndGroupMask remoteAndGroupMask;
     } group;
     struct {
       JaroCmdSrvType type;
-      RemoteAndChannel remoteAndChannel;
     } service;
   };
 };
