@@ -6,9 +6,7 @@
 #include "cc1101.h"
 #include "JaroliftCommon.h"
 #include <Arduino.h>
-#include <EEPROM.h>
-#include <nvs.h>
-#include <nvs_flash.h>
+
 
 class JaroliftController {
 public:
@@ -65,8 +63,6 @@ public:
   void setRemoteCallback(void (*callback)(uint32_t serial, int8_t function, uint16_t channel)) { remoteCallback = callback; }
 
   // Hilfsfunktionen
-  uint16_t getDeviceCounter();
-  void setDeviceCounter(uint16_t newDevCnt);
   uint32_t getSerial(uint32_t remoteSerial, uint8_t channel);
   bool getCC1101State();
   uint8_t getRssi();
@@ -75,7 +71,6 @@ private:
   // Instanzvariablen (anstatt globaler Variablen)
   GPIO gpio_;
   Config config_;
-  uint16_t devCount_;
 
   int deviceKeyMSB_;
   int deviceKeyLSB_;
@@ -128,7 +123,6 @@ private:
   uint8_t discHighArr_[16];
 
   // Hilfsfunktionen
-  void updateDeviceCounter(bool increment);
 
   void radioTxFrame(int length);
   void radioTxGroupH();
@@ -137,7 +131,7 @@ private:
   void enterTx();
   void processRxData();
   void generateKey();       // Schlüsselgenerierung (keygen)
-  void generateEncrypted(); // Verschlüsseln (keeloq)
+  void generateEncrypted(const JaroCommandTarget& target); // Verschlüsseln (keeloq)
 
   void rxKeyGen();
   uint32_t rxDecode();
