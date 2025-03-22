@@ -12,10 +12,9 @@
               href="#"
               class="sidebar-item"
               [ngClass]="{
-                'has-children': item.children,
                 'menu-item-active': item.isOpen
               }"
-              (click)="toggleMenuItem(item)"
+              [routerLink]="item.routerLink"
             >
               <i [class]="item.icon"></i>
               <span class="sidebar-item-text">{{ item.label }}</span>
