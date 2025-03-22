@@ -1,0 +1,27 @@
+<div class="sidebar" [ngClass]="{ 'sidebar-collapsed': isSidebarCollapsed }">
+    <div class="sidebar-header">
+      <a href="#" class="sidebar-logo">{{
+        isSidebarCollapsed ? 'J' : 'Jarolift-Controller'
+      }}</a>
+    </div>
+    <div class="sidebar-menu">
+      <ul>
+        <ng-container *ngFor="let item of menuItems">
+          <li class="sidebar-menu-item">
+            <a
+              href="#"
+              class="sidebar-item"
+              [ngClass]="{
+                'has-children': item.children,
+                'menu-item-active': item.isOpen
+              }"
+              (click)="toggleMenuItem(item)"
+            >
+              <i [class]="item.icon"></i>
+              <span class="sidebar-item-text">{{ item.label }}</span>
+            </a>
+          </li>
+        </ng-container>
+      </ul>
+    </div>
+  </div>
