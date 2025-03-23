@@ -1,0 +1,108 @@
+<article>
+    <div class="dash-main">
+        <div class="dash-header">Timer {{ model.timerIndex }}</div>
+        <div class="section-header">
+            <label for="timer_enable">{{ "activate" | translate }}</label>
+            <div class="switch-container">
+                <input name="timer_enable" type="checkbox" role="switch" [(ngModel)]="model.isActive" />
+            </div>
+        </div>
+        <br />
+        <form *ngIf="model.isActive">
+            <fieldset>
+                <label for="type">{{ "timer_type" | translate }}</label>
+                <select name="type" data-toggle="timeInputs" [(ngModel)]="model.type">
+                    <option [ngValue]="0">{{ "time" | translate }}</option>
+                    <option [ngValue]="1">{{ "sunrise" | translate }}</option>
+                    <option [ngValue]="2">{{ "sundown" | translate }}</option>
+                </select>
+
+                <div class="time-input" *ngIf="model.type === 0">
+                    <label for="timeValue">{{ "time_HH_MM" | translate }}</label>
+                    <input type="time" name="timeValue" [value]="model.time_value" />
+                </div>
+
+                <div class="time-input" id="offsetInput0"  *ngIf="model.type !== 0">
+                    <label for="offsetValue">{{ "offset_desc" | translate }}</label>
+                    <input type="number" name="offsetValue" placeholder="0" step="1" [value]="model.offset_value" />
+                </div>
+
+                <!-- min/max time settings for sunrise/sundown -->
+                <div *ngIf="model.type !== 0">
+                    <div class="minmaxtime-switch">
+                        <input data-toggle="timeInputs" name="use_min_time" type="checkbox" role="switch" [value]="model.use_min_time" />
+
+                        <label for="use_min_time">{{ "use_min_time" | translate }}</label>
+                    </div>
+
+                    <div class="time-input" *ngIf="model.use_min_time">
+                        <input type="time" [value]="model.min_time_value" />
+                    </div>
+
+                    <div class="minmaxtime-switch">
+                        <input data-toggle="timeInputs" name="use_max_time" type="checkbox" role="switch"  [value]="model.use_max_time" />
+
+                        <label for="use_max_time">{{ "use_max_time" | translate }}</label>
+                    </div>
+
+                    <div class="time-input" *ngIf="model.use_max_time">
+                        <input type="time" [value]="model.max_time_value" />
+                    </div>
+                </div>
+
+                <!-- Dropdown for shutter cmd -->
+                <label for="command">{{ "command" | translate }}</label>
+                <select name="command" [(ngModel)]="model.command">
+                    <option [ngValue]="0">{{ "cmd_up" | translate }}</option>
+                    <option [ngValue]="1">{{ "cmd_down" | translate }}</option>
+                    <option [ngValue]="2">{{ "cmd_shade" | translate }}</option>
+                </select>
+
+                <!-- Checkbox for wekdays -->
+                <label>{{ "weekdays" | translate }}</label>
+                <div class="grid">
+                    <div>
+                        <input type="checkbox" name="monday" [(ngModel)]="model.monday" />
+                        <label for="monday">{{ "day_mo" | translate }}</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="tuesday" [(ngModel)]="model.tuesday" />
+                        <label for="tuesday">{{ "day_tu" | translate }}</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="wednesday" [(ngModel)]="model.wednesday" />
+                        <label for="wednesday">{{ "day_we" | translate }}</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="thursday" [(ngModel)]="model.thursday" />
+                        <label for="thursday">{{ "day_th" | translate }}</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="friday" [(ngModel)]="model.friday" />
+                        <label for="friday">{{ "day_fr" | translate }}</label>
+                    </div>
+                    <br />
+                    <div>
+                        <input type="checkbox" name="saturday" [(ngModel)]="model.saturday" />
+                        <label for="saturday">{{ "day_sa" | translate }}</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="sunday" [(ngModel)]="model.sunday" />
+                        <label for="sunday">{{ "day_su" | translate }}</label>
+                    </div>
+                </div>
+                <!-- selection of shutter -->
+                <div>
+                    <div class="leftright">
+                        <label for="mask_timer">{{ "mask" | translate }}</label>
+                        <button onclick="openGrpMaskHelp(this)" class="i_help group-mask-button"></button>
+                    </div>
+                    <input class="bitmask-input" name="mask_timer" type="text" data-type="bin"
+                        oninput="validateBin(this)" onblur="formatBin(this)"
+                        pattern="[01]{1,16}" placeholder="Enter Bit-Mask (0 and 1 only, 16 chars)" maxlength="16" [(ngModel)]="model.group_mask" />
+                </div>
+                <br />
+            </fieldset>
+        </form>
+    </div>
+</article>

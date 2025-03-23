@@ -8,5 +8,4 @@ import { TranslateModule } from '@ngx-translate/core';
   styleUrl: './tools-page.component.scss'
 })
 export class ToolsPageComponent {
-
 }
