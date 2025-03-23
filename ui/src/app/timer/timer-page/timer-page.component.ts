@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { defaultTimerModel, TimerModel } from '../timer/timer.component';
 
 @Component({
   standalone: false,
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './timer-page.component.scss'
 })
 export class TimerPageComponent {
+  timers: TimerModel[] = Array.from({length: 6}, (v, k) => defaultTimerModel(k));
 }
