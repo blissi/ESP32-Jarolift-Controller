@@ -1,1 +1,167 @@
-<p>system-page works!</p>
+<div class="grid">
+    <!-- Grid 1 -->
+    <article class="card">
+        <p class="table-header">{{ "network_info" | translate }}</p>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>{{ "wifi_ip" | translate }}</td>
+                    <td id="p09_wifi_ip" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "wifi_signal" | translate }}</td>
+                    <td id="p09_wifi_signal" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "wifi_rssi" | translate }}</td>
+                    <td id="p09_wifi_rssi" class="table-value"></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>{{ "eth_ip" | translate }}</td>
+                    <td id="p09_eth_ip" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "eth_status" | translate }}</td>
+                    <td id="p09_eth_status" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "eth_link_speed" | translate }}</td>
+                    <td id="p09_eth_link_speed" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "eth_full_duplex" | translate }}</td>
+                    <td id="p09_eth_full_duplex" class="table-value"></td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+
+    <article class="card">
+        <p class="table-header">{{ "mqtt_info" | translate }}</p>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>{{ "state" | translate }}</td>
+                    <td id="p09_mqtt_status" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "connection" | translate }}</td>
+                    <td id="p09_mqtt_connection" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "last_error" | translate }}</td>
+                    <td id="p09_mqtt_last_err" class="table-value"></td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+</div>
+<!-- END Grid 1 -->
+
+<div class="grid">
+    <!-- Grid 2 -->
+    <article class="card">
+        <p class="table-header">{{ "sysinfo" | translate }}</p>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>{{ "sw_version" | translate }}</td>
+                    <td id="p09_sw_version" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "date" | translate }}</td>
+                    <td id="p09_sw_date" class="table-value"></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>{{ "lifetime" | translate }}</td>
+                    <td id="p09_uptime" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "restart_reason" | translate }}</td>
+                    <td id="p09_restart_reason" class="table-value"></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>ESP-ChipSeries</td>
+                    <td id="p09_esp_chip_series" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>ESP-ChipModel</td>
+                    <td id="p09_esp_chip_model" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>ESP-ChipRev</td>
+                    <td id="p09_esp_chip_rev" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>ESP-ChipMhz</td>
+                    <td id="p09_esp_chip_mhz" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>ESP-FlashSize</td>
+                    <td id="p09_esp_flash_size" class="table-value"></td>
+                </tr>
+            </tbody>
+        </table>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>{{ "esp_flash_usage" | translate }}</td>
+                    <td id="p09_esp_flash_usage" class="table-value"></td>
+                    <td>%</td>
+                </tr>
+                <tr>
+                    <td>{{ "esp_heap_usage" | translate }}</td>
+                    <td id="p09_esp_heap_usage" class="table-value"></td>
+                    <td>%</td>
+                </tr>
+                <tr>
+                    <td>{{ "esp_maxallocheap" | translate }}</td>
+                    <td id="p09_esp_maxallocheap" class="table-value"></td>
+                    <td>KB</td>
+                </tr>
+                <tr>
+                    <td>{{ "esp_minfreeheap" | translate }}</td>
+                    <td id="p09_esp_minfreeheap" class="table-value"></td>
+                    <td>KB</td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+
+    <article class="card">
+        <p class="table-header">{{ "time_info" | translate }}</p>
+        <table class="striped">
+            <tbody>
+                <tr>
+                    <td>{{ "date" | translate }}</td>
+                    <td id="p09_act_date" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "time" | translate }}</td>
+                    <td id="p09_act_time" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "sunrise" | translate }}</td>
+                    <td id="p09_sunrise" class="table-value"></td>
+                </tr>
+                <tr>
+                    <td>{{ "sundown" | translate }}</td>
+                    <td id="p09_sundown" class="table-value"></td>
+                </tr>
+            </tbody>
+        </table>
+    </article>
+</div>
+<!-- END Grid 2 -->

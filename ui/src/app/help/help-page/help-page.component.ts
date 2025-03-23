@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-help-page',
-  imports: [],
   templateUrl: './help-page.component.html',
   styleUrl: './help-page.component.scss'
 })
