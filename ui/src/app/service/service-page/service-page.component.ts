@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-service-page',
-  imports: [],
   templateUrl: './service-page.component.html',
   styleUrl: './service-page.component.scss'
 })

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-group-page',
-  imports: [],
   templateUrl: './group-page.component.html',
   styleUrl: './group-page.component.scss'
 })

@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ControlPageComponent } from './control-page/control-page.component';
 import { RouterModule, Routes } from '@angular/router';
 import { ChannelComponent } from './channel/channel.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 const routes: Routes = [
   {path: "", component: ControlPageComponent }
@@ -12,7 +13,8 @@ const routes: Routes = [
   declarations: [ChannelComponent, ControlPageComponent],
   imports: [
     CommonModule,
-    RouterModule.forChild(routes)
+    RouterModule.forChild(routes),
+    TranslateModule.forChild()
   ],
   exports: [ChannelComponent]
 })

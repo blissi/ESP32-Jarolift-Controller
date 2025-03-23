@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-logger-page',
-  imports: [],
   templateUrl: './logger-page.component.html',
   styleUrl: './logger-page.component.scss'
 })
