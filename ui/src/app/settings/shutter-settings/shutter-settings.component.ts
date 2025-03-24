@@ -1,0 +1,25 @@
+import { Component, Input } from '@angular/core';
+
+export interface ShutterSettingsModel {
+  index: number;
+  name: string;
+  isEnabled: boolean;
+}
+
+export function defaultShutterSettings(index: number): ShutterSettingsModel {
+  return {
+    index: index,
+    name: "",
+    isEnabled: false
+  };
+}
+
+@Component({
+  standalone: false,
+  selector: 'app-shutter-settings',
+  templateUrl: './shutter-settings.component.html',
+  styleUrl: './shutter-settings.component.scss'
+})
+export class ShutterSettingsComponent {
+  @Input() model: ShutterSettingsModel = defaultShutterSettings(-1);
+}

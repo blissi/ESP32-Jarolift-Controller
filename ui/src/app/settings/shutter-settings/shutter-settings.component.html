@@ -1,0 +1,13 @@
+<div class="row">
+    <label for="shutter">{{ "channel" | translate }} {{ model.index + 1 }}</label>
+    <input name="shutter" type="text" placeholder="name" [value]="model.name" />
+    <div>
+        <button>{{ "unlearn" | translate }}</button>
+    </div>
+    <div>
+        <button>{{ "learn" | translate }}</button>
+    </div>
+    <div>
+        <input type="checkbox" role="switch" [value]="model.isEnabled" />
+    </div>
+</div>
