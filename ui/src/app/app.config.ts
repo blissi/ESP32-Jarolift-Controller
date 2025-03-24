@@ -12,8 +12,10 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes),
     provideTranslateService({
       defaultLanguage: "de",
+      useDefaultLang: true,
       loader: {
-        provide: StaticTranslationsLoaderService
+        provide: TranslateLoader,
+        useClass: StaticTranslationsLoaderService
       }
     })
   ]
