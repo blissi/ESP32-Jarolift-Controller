@@ -1,0 +1,14 @@
+<h2 mat-dialog-title>{{ "update_failed" | translate }}</h2>
+
+<mat-dialog-content class="mat-typography">
+    <div style="text-align: center">
+        <span>{{ "error_text" | translate }}</span>
+        <span id="p00_ota_upd_err"></span>
+    </div>
+
+    <p>{{ "update_error_info" | translate }}</p>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button [mat-dialog-close]="true" cdkFocusInitial>{{ "ok" | translate }}</button>
+</mat-dialog-actions>
