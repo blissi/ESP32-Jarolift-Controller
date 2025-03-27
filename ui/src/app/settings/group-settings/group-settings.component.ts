@@ -1,4 +1,7 @@
-import { Component, Input } from '@angular/core';
+import { Component, inject, Input } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { BitmaskHelpDialog } from '../../shared/bitmask-help-dialog/bitmask-help-dialog.component';
+import { BitmaskDialog } from '../../shared/bitmask-dialog/bitmask-dialog.component';
 
 export interface GroupSettingsModel {
   index: number;
@@ -24,4 +27,44 @@ export function defaultGroupSettings(index: number): GroupSettingsModel {
 })
 export class GroupSettingsComponent {
   @Input() model: GroupSettingsModel = defaultGroupSettings(-1);
+
+  readonly dialog = inject(MatDialog);
+
+  onBitmaskHelpClicked() {
+    this.dialog.open(BitmaskHelpDialog);
+  }
+
+  onBitmaskClick() {
+    const dialogRef = this.dialog.open(BitmaskDialog);
+
+    // TODO manage the shutters somewhere...
+    dialogRef.componentInstance.shutters = [
+      {
+        index: 0,
+        name: "testblabla",
+        isEnabled: false
+      },
+      {
+        index: 1,
+        name: "wohnzimmer",
+        isEnabled: true
+      },
+      {
+        index: 2,
+        name: "Bad",
+        isEnabled: true
+      },
+      {
+        index: 3,
+        name: "Esszimmer",
+        isEnabled: true
+      },
+    ];
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.model.bitmask = result;
+      }
+    });
+  }
 }
