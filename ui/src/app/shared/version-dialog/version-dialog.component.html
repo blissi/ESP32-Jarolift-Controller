@@ -1,0 +1,20 @@
+<h2 mat-dialog-title>{{ "version_info" | translate }}</h2>
+
+<mat-dialog-content class="mat-typography">
+    <div class="leftright">
+        <span>{{ "act_version" | translate }}</span>
+        <span id="p00_dialog_version"></span>
+    </div>
+    <div class="leftright">
+        <span>{{ "github_version" | translate }}</span>
+        <a id="p00_dialog_git_version" aria-busy="true"></a>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <div id="p00_update_btn_hide" class="dash-footer" style="display: none">
+        <button id="p00_update_btn" style="width: 75%" aria-busy="false"></button>
+    </div>
+
+    <button [mat-dialog-close]="true" cdkFocusInitial>{{ "close" | translate }}</button>
+</mat-dialog-actions>
