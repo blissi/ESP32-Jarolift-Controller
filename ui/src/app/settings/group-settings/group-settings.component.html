@@ -13,9 +13,10 @@
     <div>
         <div class="label-with-button">
             <label for="mask_grp">{{ "mask" | translate }}</label>
-            <button onclick="openGrpMaskHelp(this)" class="i_help btn-open-mask"></button>
+            <button (click)="onBitmaskHelpClicked()" class="i_help btn-open-mask"></button>
         </div>
         <input class="bitmask-input" name="mask_grp" type="text" data-type="bin"
+            (click)="onBitmaskClick()"
             oninput="validateBin(this)" onblur="formatBin(this)" pattern="[01]{1,16}"
             placeholder="Enter Bit-Mask (0 and 1 only, 16 chars)" maxlength="16" [value]="model.bitmask" />
     </div>

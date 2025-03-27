@@ -6,6 +6,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { ShutterSettingsComponent } from './shutter-settings/shutter-settings.component';
 import { RemoteSettingsComponent } from './remote-settings/remote-settings.component';
 import { GroupSettingsComponent } from './group-settings/group-settings.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { SharedModule } from '../shared/shared.module';
 
 const routes: Routes = [
   {path: "", component: SettingsPageComponent }
@@ -21,7 +23,9 @@ const routes: Routes = [
   imports: [
     CommonModule,
     RouterModule.forChild(routes),
-    TranslateModule.forChild()
+    TranslateModule.forChild(),
+    MatDialogModule,
+    SharedModule
   ]
 })
 export class SettingsModule { }
