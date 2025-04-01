@@ -410,12 +410,6 @@ private exportConfig() {
   document.body.removeChild(a);
 }
 
-// CONFIG-FORM: function to activate import button and show status
-private file_sub_fun(obj) {
-  document.getElementById("file_upload_btn").disabled = false;
-  document.getElementById("upload_status_txt").style.display = "block";
-}
-
 // localization of web texts
 private localizePage(lang = "en") {
   document.querySelectorAll("[data-i18n]").forEach((elem) => {

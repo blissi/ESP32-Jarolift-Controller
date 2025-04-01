@@ -32,10 +32,9 @@
             <div class="dash-header">{{ "config_mgn" | translate }}</div>
             <div class="dash-content">
                 <form method="POST" action="#" enctype="multipart/form-data" id="file_upload_form">
-                    <input type="file" name="file_update" id="file_input" accept=".json"
-                        onchange="file_sub_fun(this)" />
-                    <div id="upload_status_txt" style="display: none; text-align: left">{{ "import_ready" | translate }}</div>
-                    <button style="width: 100%" type="submit" id="file_upload_btn" disabled="true">{{ "import" | translate }}</button>
+                    <input type="file" name="file_update" id="file_input" accept=".json" (change)="isUploadButtonEnabled = true" />
+                    <div id="upload_status_txt" style="text-align: left" [style.display]="isUploadButtonEnabled ? 'block' : 'none'">{{ "import_ready" | translate }}</div>
+                    <button style="width: 100%" type="submit" id="file_upload_btn" [disabled]="!isUploadButtonEnabled">{{ "import" | translate }}</button>
                     <button style="width: 100%" id="p11_export_btn" onclick="exportConfig()">{{ "export" | translate }}</button>
                     <button style="width: 100%; margin-top: 17px" id="p11_file_show_btn">{{ "open" | translate }}</button>
                 </form>
