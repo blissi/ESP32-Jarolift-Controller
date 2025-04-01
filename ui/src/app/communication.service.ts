@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 
 const maxReconnectDelay: number = 5000;
@@ -13,7 +14,7 @@ export class CommunicationService {
   private heartbeatTimeout?: NodeJS.Timeout;
   private reconnectDelay: number = minReconnectDelay;
 
-  constructor() {
+  constructor(private translateService: TranslateService) {
     if (this.isGitHubPages()) {
       console.log("localhost or github.io detected, skipping WebSocket setup");
       return;
@@ -206,9 +207,9 @@ export class CommunicationService {
     }
   }
 
-  private setLanguage(data) {
+  private setLanguage(data: any) {
     console.log("Set language to:", data.language);
-    this.localizePage(data.language);
+    this.translateService.use(data.language);
   }
 
   private updateJSON(data) {
@@ -388,236 +389,206 @@ export class CommunicationService {
       });
   }
 
-// OTA: function is called when the ota-file is selected
-private ota_sub_fun(obj) {
-  var a = obj.value;
-  console.log(a);
-  var fileName = a.replace(/^.*[\\\/]/, "");
-  console.log(fileName);
-  document.getElementById("ota_file_input").textContent = fileName;
-  document.getElementById("ota_update_btn").disabled = false;
-  document.getElementById("ota_progress_bar").style.display = "block";
-  document.getElementById("ota_status_txt").style.display = "block";
-}
+  // OTA: function is called when the ota-file is selected
+  private ota_sub_fun(obj) {
+    var a = obj.value;
+    console.log(a);
+    var fileName = a.replace(/^.*[\\\/]/, "");
+    console.log(fileName);
+    document.getElementById("ota_file_input").textContent = fileName;
+    document.getElementById("ota_update_btn").disabled = false;
+    document.getElementById("ota_progress_bar").style.display = "block";
+    document.getElementById("ota_status_txt").style.display = "block";
+  }
 
-// CONFIG-FORM: function for download config.json file
-private exportConfig() {
-  var a = document.createElement("a");
-  a.href = "/config-download";
-  a.download = "config.json";
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-}
+  // CONFIG-FORM: function for download config.json file
+  private exportConfig() {
+    var a = document.createElement("a");
+    a.href = "/config-download";
+    a.download = "config.json";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
 
-// localization of web texts
-private localizePage(lang = "en") {
-  document.querySelectorAll("[data-i18n]").forEach((elem) => {
-    const i18nValue = elem.getAttribute("data-i18n");
-    const [translationPart, addon] = i18nValue.split("++", 2);
-    const matches = translationPart.split(/(\$.+?\$)/).filter(Boolean);
-    let text = "";
+  // to show reload bar if connection is lost
+  private showReloadBar() {
+    document.getElementById("connectionLostBar").style.display = "flex";
+  }
 
-    for (const match of matches) {
-      if (match.startsWith("$") && match.endsWith("$")) {
-        text += match.slice(1, -1);
-      } else {
-        // check if translation key is valid
-        if (lib_translations.hasOwnProperty(match)) {
-          text += lib_translations[match][lang] || match;
-        } else if (user_translations.hasOwnProperty(match)) {
-          text += user_translations[match][lang] || match;
-        } else {
-          console.error(`translation key "${match}" not found`);
+  // to hide reload bar if connection is lost
+  private hideReloadBar() {
+    document.getElementById("connectionLostBar").style.display = "none";
+  }
+
+  private validateHex(input) {
+    // Entferne alles außer gültigen HEX-Zeichen und '0x', und stelle sicher, dass Großbuchstaben verwendet werden
+    input.value = input.value.replace(/[^0-9a-fA-F]/g, "").toLowerCase();
+  }
+
+  private formatHex(input) {
+    const length = parseInt(input.getAttribute("data-length"), 10) || 6; // Standardlänge: 6
+    // Auffüllen mit führenden Nullen entsprechend der gewünschten Länge
+    input.value = input.value.padStart(length, "0").toLowerCase();
+  }
+
+  private validateBin(input) {
+    // Entferne alles außer 0 und 1
+    input.value = input.value.replace(/[^0-1]/g, "");
+  }
+
+  private formatBin(input) {
+    const length = parseInt(input.getAttribute("data-length"), 10) || 16; // Standardlänge: 16
+    input.value = input.value.padStart(length, "0");
+  }
+
+  private validateIP(input) {
+    // IPv4-Validierung
+    const ipPattern =
+      /^((25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
+    if (!ipPattern.test(input.value.trim())) {
+      input.setAttribute("aria-invalid", "true");
+    } else {
+      input.setAttribute("aria-invalid", "false");
+      sendData(input.id, input.value);
+    }
+  }
+
+  // update elements based on config.json file
+  private updateUI(config, prefix = "cfg", ignoreKeys = ["version"]) {
+    console.log("updating config");
+    for (const key in config) {
+      if (config.hasOwnProperty(key)) {
+        // Prüfen, ob der aktuelle Schlüssel ignoriert werden soll
+        if (ignoreKeys.includes(key)) {
+          console.log("config update - key ignored: " + key);
           continue;
         }
-      }
-    }
-    if (addon) {
-      text += addon;
-    }
-    elem.innerText = text;
-  });
-}
 
-// to show reload bar if connection is lost
-private showReloadBar() {
-  document.getElementById("connectionLostBar").style.display = "flex";
-}
+        const value = config[key];
+        const elementId = `${prefix}_${key}`;
 
-// to hide reload bar if connection is lost
-private hideReloadBar() {
-  document.getElementById("connectionLostBar").style.display = "none";
-}
-
-private validateHex(input) {
-  // Entferne alles außer gültigen HEX-Zeichen und '0x', und stelle sicher, dass Großbuchstaben verwendet werden
-  input.value = input.value.replace(/[^0-9a-fA-F]/g, "").toLowerCase();
-}
-
-private formatHex(input) {
-  const length = parseInt(input.getAttribute("data-length"), 10) || 6; // Standardlänge: 6
-  // Auffüllen mit führenden Nullen entsprechend der gewünschten Länge
-  input.value = input.value.padStart(length, "0").toLowerCase();
-}
-
-private validateBin(input) {
-  // Entferne alles außer 0 und 1
-  input.value = input.value.replace(/[^0-1]/g, "");
-}
-
-private formatBin(input) {
-  const length = parseInt(input.getAttribute("data-length"), 10) || 16; // Standardlänge: 16
-  input.value = input.value.padStart(length, "0");
-}
-
-private validateIP(input) {
-  // IPv4-Validierung
-  const ipPattern =
-    /^((25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
-  if (!ipPattern.test(input.value.trim())) {
-    input.setAttribute("aria-invalid", "true");
-  } else {
-    input.setAttribute("aria-invalid", "false");
-    sendData(input.id, input.value);
-  }
-}
-
-// update elements based on config.json file
-private updateUI(config, prefix = "cfg", ignoreKeys = ["version"]) {
-  console.log("updating config");
-  for (const key in config) {
-    if (config.hasOwnProperty(key)) {
-      // Prüfen, ob der aktuelle Schlüssel ignoriert werden soll
-      if (ignoreKeys.includes(key)) {
-        console.log("config update - key ignored: " + key);
-        continue;
-      }
-
-      const value = config[key];
-      const elementId = `${prefix}_${key}`;
-
-      // Überprüfen, ob das aktuelle Element ein verschachteltes Objekt ist
-      if (typeof value === "object" && value !== null) {
-        // Rekursiv weiter ins Objekt gehen, mit dem erweiterten Prefix
-        updateUI(value, elementId, ignoreKeys);
-      } else {
-        // UI-Element mit dem zusammengesetzten ID suchen
-        const element = document.getElementById(elementId);
-        if (element) {
-          // Unterscheide die Art des HTML-Elements
-          if (element.type === "checkbox") {
-            // Setze das "checked"-Attribut für Checkboxen
-            element.checked = value === true;
-            toggleElementVisibility(
-              element.getAttribute("hideOpt"),
-              element.checked
-            );
-          } else if (element.type === "radio") {
-            // Setze das "checked"-Attribut für Radio-Buttons
-            element.checked = element.value === value.toString();
-          } else if (element.tagName === "SELECT") {
-            // Setze den "value"-Attribut für <select>-Elemente
-            element.value = value;
-
-            // Prüfen, ob im globalen Scope eine Funktion updateUIcallbackSelect existiert
-            if (typeof window.updateUIcallbackSelect === "function") {
-              window.updateUIcallbackSelect(elementId, value);
-            }
-          } else if (element.type === "password") {
-            // Always set password fields to "XxXxXxXxXxX" as a placeholder
-            element.value = "XxXxXxXxXxX";
-          } else {
-            // Überprüfen, ob das Feld ein HEX- oder Binärwert benötigt
-            if (element.dataset.type === "hex" && typeof value === "number") {
-              // Konvertiere Zahl zu HEX und setze den Wert
-              element.value = value.toString(16).toLowerCase();
-              formatHex(element);
-            } else if (
-              element.dataset.type === "bin" &&
-              typeof value === "number"
-            ) {
-              // Konvertiere Zahl zu Binär und setze den Wert
-              element.value = value.toString(2);
-              formatBin(element);
-            } else {
-              // Setze den "value"-Attribut für andere Eingabetypen (z.B. text, number)
-              element.value = value;
-            }
-          }
+        // Überprüfen, ob das aktuelle Element ein verschachteltes Objekt ist
+        if (typeof value === "object" && value !== null) {
+          // Rekursiv weiter ins Objekt gehen, mit dem erweiterten Prefix
+          updateUI(value, elementId, ignoreKeys);
         } else {
-          console.error("config update - elementId not found: " + elementId);
+          // UI-Element mit dem zusammengesetzten ID suchen
+          const element = document.getElementById(elementId);
+          if (element) {
+            // Unterscheide die Art des HTML-Elements
+            if (element.type === "checkbox") {
+              // Setze das "checked"-Attribut für Checkboxen
+              element.checked = value === true;
+              toggleElementVisibility(
+                element.getAttribute("hideOpt"),
+                element.checked
+              );
+            } else if (element.type === "radio") {
+              // Setze das "checked"-Attribut für Radio-Buttons
+              element.checked = element.value === value.toString();
+            } else if (element.tagName === "SELECT") {
+              // Setze den "value"-Attribut für <select>-Elemente
+              element.value = value;
+
+              // Prüfen, ob im globalen Scope eine Funktion updateUIcallbackSelect existiert
+              if (typeof window.updateUIcallbackSelect === "function") {
+                window.updateUIcallbackSelect(elementId, value);
+              }
+            } else if (element.type === "password") {
+              // Always set password fields to "XxXxXxXxXxX" as a placeholder
+              element.value = "XxXxXxXxXxX";
+            } else {
+              // Überprüfen, ob das Feld ein HEX- oder Binärwert benötigt
+              if (element.dataset.type === "hex" && typeof value === "number") {
+                // Konvertiere Zahl zu HEX und setze den Wert
+                element.value = value.toString(16).toLowerCase();
+                formatHex(element);
+              } else if (
+                element.dataset.type === "bin" &&
+                typeof value === "number"
+              ) {
+                // Konvertiere Zahl zu Binär und setze den Wert
+                element.value = value.toString(2);
+                formatBin(element);
+              } else {
+                // Setze den "value"-Attribut für andere Eingabetypen (z.B. text, number)
+                element.value = value;
+              }
+            }
+          } else {
+            console.error("config update - elementId not found: " + elementId);
+          }
         }
       }
     }
+    synchronizeDataSyncFields();
   }
-  synchronizeDataSyncFields();
-}
 
-// load and update config
-private async loadConfig() {
-  console.log("loading config");
-  try {
-    const response = await fetch("config.json");
-    if (!response.ok)
-      throw new Error("Fehler beim Abrufen der Konfigurationsdaten");
+  // load and update config
+  private async loadConfig() {
+    console.log("loading config");
+    try {
+      const response = await fetch("config.json");
+      if (!response.ok)
+        throw new Error("Fehler beim Abrufen der Konfigurationsdaten");
 
-    const config = await response.json();
+      const config = await response.json();
 
-    // update UI-Elementes based on config.json
-    updateUI(config);
-  } catch (error) {
-    console.error("Error loading config:", error);
+      // update UI-Elementes based on config.json
+      updateUI(config);
+    } catch (error) {
+      console.error("Error loading config:", error);
+    }
   }
-}
 
-private synchronizeDataSyncFields() {
-  // find all input fields with data-sync
-  const inputs = document.querySelectorAll("input[data-sync]");
+  private synchronizeDataSyncFields() {
+    // find all input fields with data-sync
+    const inputs = document.querySelectorAll("input[data-sync]");
 
-  inputs.forEach((inputElement) => {
-    // split data-sync IDs by comma
-    const syncIds = inputElement.dataset.sync.split(",");
+    inputs.forEach((inputElement) => {
+      // split data-sync IDs by comma
+      const syncIds = inputElement.dataset.sync.split(",");
 
-    syncIds.forEach((syncId) => {
-      const syncElement = document.getElementById(syncId.trim());
+      syncIds.forEach((syncId) => {
+        const syncElement = document.getElementById(syncId.trim());
 
-      if (syncElement) {
-        // initial synchronization
-        syncElement.textContent = inputElement.value;
-
-        // synchronize user inputs
-        inputElement.addEventListener("input", (event) => {
-          syncElement.textContent = event.target.value;
-        });
-
-        // check for programmed changes
-        const observer = new MutationObserver(() => {
+        if (syncElement) {
+          // initial synchronization
           syncElement.textContent = inputElement.value;
-        });
 
-        observer.observe(inputElement, {
-          attributes: true,
-          attributeFilter: ["value"],
-        });
-      }
+          // synchronize user inputs
+          inputElement.addEventListener("input", (event) => {
+            syncElement.textContent = event.target.value;
+          });
+
+          // check for programmed changes
+          const observer = new MutationObserver(() => {
+            syncElement.textContent = inputElement.value;
+          });
+
+          observer.observe(inputElement, {
+            attributes: true,
+            attributeFilter: ["value"],
+          });
+        }
+      });
     });
-  });
-}
-
-private toggleEdit(button, inputId) {
-  const input = document.getElementById(inputId);
-  console.log("button pressed");
-  if (button.innerText === "Edit") {
-    input.disabled = false;
-    input.focus();
-    button.innerText = "Lock";
-    console.log("button edit");
-  } else {
-    input.blur();
-    input.disabled = true;
-    button.innerText = "Edit";
-    console.log("button save");
   }
-}
+
+  private toggleEdit(button, inputId) {
+    const input = document.getElementById(inputId);
+    console.log("button pressed");
+    if (button.innerText === "Edit") {
+      input.disabled = false;
+      input.focus();
+      button.innerText = "Lock";
+      console.log("button edit");
+    } else {
+      input.blur();
+      input.disabled = true;
+      button.innerText = "Edit";
+      console.log("button save");
+    }
+  }
 }
