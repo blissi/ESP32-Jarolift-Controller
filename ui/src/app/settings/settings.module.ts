@@ -8,6 +8,7 @@ import { RemoteSettingsComponent } from './remote-settings/remote-settings.compo
 import { GroupSettingsComponent } from './group-settings/group-settings.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from '../shared/shared.module';
+import { FormsModule } from '@angular/forms';
 
 const routes: Routes = [
   {path: "", component: SettingsPageComponent }
@@ -22,6 +23,7 @@ const routes: Routes = [
   ],
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule.forChild(routes),
     TranslateModule.forChild(),
     MatDialogModule,

@@ -30,7 +30,7 @@
                 <!-- min/max time settings for sunrise/sundown -->
                 <div *ngIf="model.type !== 0">
                     <div class="minmaxtime-switch">
-                        <input data-toggle="timeInputs" name="use_min_time" type="checkbox" role="switch" [value]="model.use_min_time" />
+                        <input data-toggle="timeInputs" name="use_min_time" type="checkbox" role="switch" [(ngModel)]="model.use_min_time" />
 
                         <label for="use_min_time">{{ "use_min_time" | translate }}</label>
                     </div>
@@ -40,7 +40,7 @@
                     </div>
 
                     <div class="minmaxtime-switch">
-                        <input data-toggle="timeInputs" name="use_max_time" type="checkbox" role="switch"  [value]="model.use_max_time" />
+                        <input data-toggle="timeInputs" name="use_max_time" type="checkbox" role="switch" [(ngModel)]="model.use_max_time" />
 
                         <label for="use_max_time">{{ "use_max_time" | translate }}</label>
                     </div>

@@ -1,4 +1,4 @@
 <div class="grid">
-    <app-channel *ngFor="let channel of channels" [channelIndex]="channel"></app-channel>
+    <app-channel *ngFor="let shutter of state()?.shutters" [shutter]="shutter"></app-channel>
 </div>
     

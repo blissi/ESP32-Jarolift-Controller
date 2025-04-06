@@ -136,20 +136,20 @@ export class CommunicationService {
 
   // heartbeat function
   private resetHeartbeat() {
-    clearTimeout(heartbeatTimeout);
-    heartbeatTimeout = setTimeout(() => {
+    clearTimeout(this.heartbeatTimeout);
+    this.heartbeatTimeout = setTimeout(() => {
       console.warn("No heartbeat received, reconnecting...");
-      ws.close();
-      showReloadBar();
+      this.ws.close();
+      this.showReloadBar();
     }, 5000);
   }
 
   private attemptReconnect() {
     setTimeout(() => {
-      console.log(`Attempting reconnect in ${reconnectDelay / 1000} seconds...`);
-      setupWS();
-      reconnectDelay = Math.min(reconnectDelay * 2, maxReconnectDelay);
-    }, reconnectDelay);
+      console.log(`Attempting reconnect in ${this.reconnectDelay / 1000} seconds...`);
+      this.setupWS();
+      this.reconnectDelay = Math.min(this.reconnectDelay * 2, maxReconnectDelay);
+    }, this.reconnectDelay);
   }
 
   private restartFunction() {
