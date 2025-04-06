@@ -1,6 +1,6 @@
 <div class="row">
     <label for="shutter">{{ "channel" | translate }} {{ model.index + 1 }}</label>
-    <input name="shutter" type="text" placeholder="name" [value]="model.name" />
+    <input name="shutter" type="text" placeholder="name" [(ngModel)]="model.name" />
     <div>
         <button>{{ "unlearn" | translate }}</button>
     </div>
@@ -8,6 +8,6 @@
         <button>{{ "learn" | translate }}</button>
     </div>
     <div>
-        <input type="checkbox" role="switch" [value]="model.isEnabled" />
+        <input type="checkbox" role="switch" [(ngModel)]="model.isEnabled" />
     </div>
 </div>

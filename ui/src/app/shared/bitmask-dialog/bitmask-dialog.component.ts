@@ -1,10 +1,10 @@
 import { Component, Input } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { ShutterSettingsModel } from '../../settings/shutter-settings/shutter-settings.component';
+import { Shutter } from '../../shutter';
 
 
 interface BitStateModel {
-  shutter: ShutterSettingsModel;
+  shutter: Shutter;
   isChecked: boolean;
 }
 

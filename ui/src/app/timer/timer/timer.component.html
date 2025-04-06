@@ -19,12 +19,12 @@
 
                 <div class="time-input" *ngIf="model.type === 0">
                     <label for="timeValue">{{ "time_HH_MM" | translate }}</label>
-                    <input type="time" name="timeValue" [value]="model.time_value" />
+                    <input type="time" name="timeValue" [(ngModel)]="model.time_value" />
                 </div>
 
                 <div class="time-input" id="offsetInput0"  *ngIf="model.type !== 0">
                     <label for="offsetValue">{{ "offset_desc" | translate }}</label>
-                    <input type="number" name="offsetValue" placeholder="0" step="1" [value]="model.offset_value" />
+                    <input type="number" name="offsetValue" placeholder="0" step="1" [(ngModel)]="model.offset_value" />
                 </div>
 
                 <!-- min/max time settings for sunrise/sundown -->
@@ -36,7 +36,7 @@
                     </div>
 
                     <div class="time-input" *ngIf="model.use_min_time">
-                        <input type="time" [value]="model.min_time_value" />
+                        <input type="time" [(ngModel)]="model.min_time_value" />
                     </div>
 
                     <div class="minmaxtime-switch">
@@ -46,7 +46,7 @@
                     </div>
 
                     <div class="time-input" *ngIf="model.use_max_time">
-                        <input type="time" [value]="model.max_time_value" />
+                        <input type="time" [(ngModel)]="model.max_time_value" />
                     </div>
                 </div>
 

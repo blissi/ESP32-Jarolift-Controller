@@ -1,14 +1,15 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, Subject } from 'rxjs';
-import { defaultShutterSettings, ShutterSettingsModel } from './settings/shutter-settings/shutter-settings.component';
-import { defaultRemoteSettings, RemoteSettingsModel } from './settings/remote-settings/remote-settings.component';
-import { defaultGroupSettings, GroupSettingsModel } from './settings/group-settings/group-settings.component';
+import { Shutter } from './shutter';
+import { CommunicationService } from './communication.service';
+import { ShutterGroup } from './shutter-group';
+import { Remote } from './remote';
 
 
 export interface AppState {
-  shutters: ShutterSettingsModel[];
-  remotes: RemoteSettingsModel[];
-  groups: GroupSettingsModel[];
+  shutters: Shutter[];
+  remotes: Remote[];
+  groups: ShutterGroup[];
 }
 
 
@@ -18,11 +19,11 @@ export interface AppState {
 export class AppStateService {
   $state: Observable<AppState>;
 
-  constructor() {
+  constructor(comm: CommunicationService) {
     this.$state = of({
-      shutters: Array.from({ length: 16 }, (v, k) => defaultShutterSettings(k)),
-      remotes: Array.from({ length: 16 }, (v, k) => defaultRemoteSettings(k)),
-      groups: Array.from({ length: 6 }, (v, k) => defaultGroupSettings(k))
+      shutters: Array.from({ length: 16 }, (v, k) => new Shutter(comm, k)),
+      remotes: Array.from({ length: 16 }, (v, k) => new Remote(comm, k)),
+      groups: Array.from({ length: 6 }, (v, k) => new ShutterGroup(comm, k))
     });
   }
 }
