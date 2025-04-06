@@ -1,7 +1,6 @@
-import { Component } from '@angular/core';
-import { defaultShutterSettings, ShutterSettingsModel } from '../shutter-settings/shutter-settings.component';
-import { defaultRemoteSettings, RemoteSettingsModel } from '../remote-settings/remote-settings.component';
-import { defaultGroupSettings, GroupSettingsModel } from '../group-settings/group-settings.component';
+import { Component, Signal } from '@angular/core';
+import { AppState, AppStateService } from '../../app-state.service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   standalone: false,
@@ -10,7 +9,14 @@ import { defaultGroupSettings, GroupSettingsModel } from '../group-settings/grou
   styleUrl: './settings-page.component.scss'
 })
 export class SettingsPageComponent {
-  shutters: ShutterSettingsModel[] = Array.from({length: 16}, (v, k) => defaultShutterSettings(k));
-  remotes: RemoteSettingsModel[] = Array.from({length: 16}, (v, k) => defaultRemoteSettings(k));
-  groups: GroupSettingsModel[] = Array.from({length: 6}, (v, k) => defaultGroupSettings(k));
+  state: Signal<AppState | undefined>;
+
+  constructor(appState: AppStateService) {
+    this.state = toSignal(appState.$state);
+  }
+
+
+  // TODO create a model class...
+  wifiUseStaticIPAddress: boolean = false;
+  ethernetUseStaticIPAddress: boolean = false;
 }

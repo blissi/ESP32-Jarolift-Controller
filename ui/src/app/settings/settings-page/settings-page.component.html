@@ -20,12 +20,11 @@
             <div class="section-header">
                 <label for="man_ip_enable">{{"static_ip" | translate }}</label>
                 <div class="switch-container">
-                    <input name="man_ip_enable" type="checkbox" role="switch" hideOpt="WIFI_STATIC_IP"
-                        id="cfg_wifi_static_ip" />
+                    <input name="man_ip_enable" type="checkbox" role="switch" id="cfg_wifi_static_ip" [(ngModel)]="wifiUseStaticIPAddress" />
                 </div>
             </div>
             <br />
-            <div class="WIFI_STATIC_IP">
+            <div class="WIFI_STATIC_IP" [style.display]="wifiUseStaticIPAddress ? '' : 'none'">
                 <label for="ip_adr">{{"ip_adr" | translate }}</label>
                 <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_wifi_ipaddress" name="ip_adr" />
                 <label for="ip_subnet">{{"ip_subnet" | translate }}</label>
@@ -64,12 +63,12 @@
             <div class="section-header">
                 <label for="man_ip_enable">{{"static_ip" | translate }}</label>
                 <div class="switch-container">
-                    <input name="man_ip_enable" type="checkbox" role="switch" hideOpt="ETH_STATIC_IP"
+                    <input name="man_ip_enable" type="checkbox" role="switch" [(ngModel)]="ethernetUseStaticIPAddress" />
                         id="cfg_eth_static_ip" />
                 </div>
             </div>
             <br />
-            <div class="ETH_STATIC_IP">
+            <div class="ETH_STATIC_IP" [style.display]="ethernetUseStaticIPAddress ? '' : 'none'">
                 <label for="ip_adr">{{"ip_adr" | translate }}</label>
                 <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_eth_ipaddress" name="ip_adr" />
                 <label for="ip_subnet">{{"ip_subnet" | translate }}</label>
@@ -87,7 +86,7 @@
             <div class="section-header">
                 <label for="auth_enable">{{ "activate" | translate }}</label>
                 <div class="switch-container">
-                    <input name="auth_enable" type="checkbox" role="switch" hideOpt="OPT_AUTH" id="cfg_auth_enable" />
+                    <input name="auth_enable" type="checkbox" role="switch" id="cfg_auth_enable" />
                 </div>
             </div>
             <br />
@@ -259,7 +258,7 @@
         <details>
             <summary>{{ "shutter" | translate }}</summary>
             <br />
-            <app-shutter-settings *ngFor="let shutter of shutters" [model]="shutter" />
+            <app-shutter-settings *ngFor="let shutter of state()!.shutters" [model]="shutter" />
         </details>
         <hr />
         <!-- Dialog OPEN-BITMASK-HELP -->
@@ -276,13 +275,13 @@
         <details>
             <summary>{{ "groups" | translate }}</summary>
             <br />
-            <app-group-settings *ngFor="let group of groups" [model]="group" />
+            <app-group-settings *ngFor="let group of state()!.groups" [model]="group" />
         </details>
         <hr />
         <!-- Remotes 1-16 -->
         <details>
             <summary>{{ "remotes" | translate }}</summary>
-            <app-remote-settings *ngFor="let remote of remotes" [model]="remote" />
+            <app-remote-settings *ngFor="let remote of state()!.remotes" [model]="remote" />
         </details>
         <hr />
         <!-- Language -->

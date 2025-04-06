@@ -1,11 +1,11 @@
-<article class="dash CH{{channelIndex + 1}}" style="height: 120px">
+<article *ngIf="shutter.isEnabled" class="dash" style="height: 120px">
     <div class="dash-main">
-      <div class="dash-header" id="p01_jaro_ch_name_14">channel {{channelIndex + 1}}</div>
+      <div class="dash-header" id="p01_jaro_ch_name_14">{{shutter.name}}</div>
       <div class="dash-content">
-        <button id="p01_up_{{channelIndex}}" class="svgbtn i_up"></button>
-        <button id="p01_stop_{{channelIndex}}" class="svgbtn i_stop"></button>
-        <button id="p01_down_{{channelIndex}}" class="svgbtn i_down"></button>
-        <button id="p01_shade_{{channelIndex}}" class="svgbtn i_shade"></button>
+        <button id="p01_up_{{shutter.index}}" class="svgbtn i_up"></button>
+        <button id="p01_stop_{{shutter.index}}" class="svgbtn i_stop"></button>
+        <button id="p01_down_{{shutter.index}}" class="svgbtn i_down"></button>
+        <button id="p01_shade_{{shutter.index}}" class="svgbtn i_shade"></button>
       </div>
     </div>
   </article>

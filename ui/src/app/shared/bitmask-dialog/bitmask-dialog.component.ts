@@ -1,12 +1,13 @@
 import { Component, Input } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { ShutterSettingsModel } from '../../settings/shutter-settings/shutter-settings.component';
-import { DialogRef } from '@angular/cdk/dialog';
+
 
 interface BitStateModel {
   shutter: ShutterSettingsModel;
   isChecked: boolean;
 }
+
 
 @Component({
   standalone: false,
@@ -17,20 +18,7 @@ export class BitmaskDialog {
   constructor(private dialogRef: MatDialogRef<BitmaskDialog>) {
   }
 
-  @Input() shutters!: ShutterSettingsModel[];
-
   bitStates!: BitStateModel[];
-
-  ngOnInit() {
-    this.bitStates = this.shutters
-      .filter(x => x.isEnabled)
-      .map((x, i) => {
-        return {
-          shutter: x,
-          isChecked: false
-        }
-      });
-  }
 
   public onApply(): void {
     let bitmask = 0;

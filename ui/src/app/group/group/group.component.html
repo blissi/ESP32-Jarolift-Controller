@@ -1,0 +1,11 @@
+<article *ngIf="group.isEnabled" class="dash" style="height: 120px">
+  <div class="dash-main">
+    <div class="dash-header">{{group.name}}</div>
+    <div class="dash-content">
+      <button id="p02_up_{{group.index}}" class="svgbtn i_up"></button>
+      <button id="p02_stop_{{group.index}}" class="svgbtn i_stop"></button>
+      <button id="p02_down_{{group.index}}" class="svgbtn i_down"></button>
+      <button id="p02_shade_{{group.index}}" class="svgbtn i_shade"></button>
+    </div>
+  </div>
+</article>
