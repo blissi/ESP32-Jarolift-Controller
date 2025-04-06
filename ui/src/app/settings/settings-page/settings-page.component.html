@@ -6,33 +6,33 @@
             <div class="section-header">
                 <label for="wifi_enable">{{"activate" | translate }}</label>
                 <div class="switch-container">
-                    <input name="wifi_enable" type="checkbox" role="switch" id="cfg_wifi_enable" />
+                    <input name="wifi_enable" type="checkbox" role="switch" appSendData="cfg_wifi_enable" />
                 </div>
             </div>
             <br />
             <label for="wifi_hostname">{{"hostname" | translate }}</label>
-            <input type="text" id="cfg_wifi_hostname" name="wifi_hostname" />
+            <input type="text" appSendData="cfg_wifi_hostname" name="wifi_hostname" />
             <label for="wifi_ssid">{{"ssid" | translate }}</label>
-            <input type="text" id="cfg_wifi_ssid" name="wifi_ssid" />
+            <input type="text" appSendData="cfg_wifi_ssid" name="wifi_ssid" />
             <label for="wifi_password">Passwort</label>
-            <input type="password" id="cfg_wifi_password" name="wifi_password" />
+            <input type="password" appSendData="cfg_wifi_password" name="wifi_password" />
 
             <div class="section-header">
                 <label for="man_ip_enable">{{"static_ip" | translate }}</label>
                 <div class="switch-container">
-                    <input name="man_ip_enable" type="checkbox" role="switch" id="cfg_wifi_static_ip" [(ngModel)]="wifiUseStaticIPAddress" />
+                    <input name="man_ip_enable" type="checkbox" role="switch" appSendData="cfg_wifi_static_ip" [(ngModel)]="wifiUseStaticIPAddress" />
                 </div>
             </div>
             <br />
             <div class="WIFI_STATIC_IP" [style.display]="wifiUseStaticIPAddress ? '' : 'none'">
                 <label for="ip_adr">{{"ip_adr" | translate }}</label>
-                <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_wifi_ipaddress" name="ip_adr" />
+                <input type="url" data-type="ip" oninput="validateIP(this)" appSendData="cfg_wifi_ipaddress" name="ip_adr" />
                 <label for="ip_subnet">{{"ip_subnet" | translate }}</label>
-                <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_wifi_subnet" name="ip_subnet" />
+                <input type="url" data-type="ip" oninput="validateIP(this)" appSendData="cfg_wifi_subnet" name="ip_subnet" />
                 <label for="ip_gateway">{{"ip_gateway" | translate }}</label>
-                <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_wifi_gateway" name="ip_gateway" />
+                <input type="url" data-type="ip" oninput="validateIP(this)" appSendData="cfg_wifi_gateway" name="ip_gateway" />
                 <label for="ip_dns">{{"ip_dns" | translate }}</label>
-                <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_wifi_dns" name="ip_dns" />
+                <input type="url" data-type="ip" oninput="validateIP(this)" appSendData="cfg_wifi_dns" name="ip_dns" />
             </div>
         </details>
         <hr />
@@ -42,41 +42,40 @@
             <div class="section-header">
                 <label for="eth_enable">{{"activate" | translate }}</label>
                 <div class="switch-container">
-                    <input name="eth_enable" type="checkbox" role="switch" id="cfg_eth_enable" />
+                    <input name="eth_enable" type="checkbox" role="switch" appSendData="cfg_eth_enable" />
                 </div>
             </div>
             <br />
             <label for="eth_hostname">{{"hostname" | translate }}</label>
-            <input type="text" id="cfg_eth_hostname" name="eth_hostname" />
+            <input type="text" appSendData="cfg_eth_hostname" name="eth_hostname" />
             <label for="eth_gpio_sck">GPIO CLK</label>
-            <input type="number" id="cfg_eth_gpio_sck" name="eth_gpio_sck" />
+            <input type="number" appSendData="cfg_eth_gpio_sck" name="eth_gpio_sck" />
             <label for="eth_gpio_mosi">GPIO MOSI</label>
-            <input type="number" id="cfg_eth_gpio_mosi" name="eth_gpio_mosi" />
+            <input type="number" appSendData="cfg_eth_gpio_mosi" name="eth_gpio_mosi" />
             <label for="eth_gpio_miso">GPIO MISO</label>
-            <input type="number" id="cfg_eth_gpio_miso" name="eth_gpio_miso" />
+            <input type="number" appSendData="cfg_eth_gpio_miso" name="eth_gpio_miso" />
             <label for="eth_gpio_cs">GPIO CS</label>
-            <input type="number" id="cfg_eth_gpio_cs" name="eth_gpio_cs" />
+            <input type="number" appSendData="cfg_eth_gpio_cs" name="eth_gpio_cs" />
             <label for="eth_gpio_irq">GPIO INT</label>
-            <input type="number" id="cfg_eth_gpio_irq" name="eth_gpio_irq" />
+            <input type="number" appSendData="cfg_eth_gpio_irq" name="eth_gpio_irq" />
             <label for="eth_gpio_rst">GPIO RST</label>
-            <input type="number" id="cfg_eth_gpio_rst" name="eth_gpio_rst" />
+            <input type="number" appSendData="cfg_eth_gpio_rst" name="eth_gpio_rst" />
             <div class="section-header">
                 <label for="man_ip_enable">{{"static_ip" | translate }}</label>
                 <div class="switch-container">
-                    <input name="man_ip_enable" type="checkbox" role="switch" [(ngModel)]="ethernetUseStaticIPAddress" />
-                        id="cfg_eth_static_ip" />
+                    <input name="man_ip_enable" type="checkbox" role="switch" [(ngModel)]="ethernetUseStaticIPAddress" appSendData="cfg_eth_static_ip" />
                 </div>
             </div>
             <br />
             <div class="ETH_STATIC_IP" [style.display]="ethernetUseStaticIPAddress ? '' : 'none'">
                 <label for="ip_adr">{{"ip_adr" | translate }}</label>
-                <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_eth_ipaddress" name="ip_adr" />
+                <input type="url" data-type="ip" oninput="validateIP(this)" appSendData="cfg_eth_ipaddress" name="ip_adr" />
                 <label for="ip_subnet">{{"ip_subnet" | translate }}</label>
-                <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_eth_subnet" name="ip_subnet" />
+                <input type="url" data-type="ip" oninput="validateIP(this)" appSendData="cfg_eth_subnet" name="ip_subnet" />
                 <label for="ip_gateway">{{"ip_gateway" | translate }}</label>
-                <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_eth_gateway" name="ip_gateway" />
+                <input type="url" data-type="ip" oninput="validateIP(this)" appSendData="cfg_eth_gateway" name="ip_gateway" />
                 <label for="ip_dns">{{ "ip_dns" | translate }}</label>
-                <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_eth_dns" name="ip_dns" />
+                <input type="url" data-type="ip" oninput="validateIP(this)" appSendData="cfg_eth_dns" name="ip_dns" />
             </div>
         </details>
         <hr />
@@ -86,14 +85,14 @@
             <div class="section-header">
                 <label for="auth_enable">{{ "activate" | translate }}</label>
                 <div class="switch-container">
-                    <input name="auth_enable" type="checkbox" role="switch" id="cfg_auth_enable" />
+                    <input name="auth_enable" type="checkbox" role="switch" appSendData="cfg_auth_enable" />
                 </div>
             </div>
             <br />
             <label for="auth_user">{{ "user" | translate }}</label>
-            <input type="text" id="cfg_auth_user" name="auth_user" />
+            <input type="text" appSendData="cfg_auth_user" name="auth_user" />
             <label for="auth_passw">{{ "password" | translate }}</label>
-            <input type="password" id="cfg_auth_password" name="auth_passw" />
+            <input type="password" appSendData="cfg_auth_password" name="auth_passw" />
         </details>
         <hr />
         <!-- NTP-Server -->
@@ -102,12 +101,12 @@
             <div class="section-header">
                 <label for="ntp_enable">{{ "activate" | translate }}</label>
                 <div class="switch-container">
-                    <input name="ntp_enable" type="checkbox" role="switch" id="cfg_ntp_enable" />
+                    <input name="ntp_enable" type="checkbox" role="switch" appSendData="cfg_ntp_enable" />
                 </div>
             </div>
             <br />
             <label for="ntp_server">{{ "server" | translate }}</label>
-            <input type="text" id="cfg_ntp_server" name="ntp_server" />
+            <input type="text" appSendData="cfg_ntp_server" name="ntp_server" />
             <div class="leftright">
                 <label for="time_zone">{{ "ntp_tz" | translate }}</label>
                 <button id="p12_ntp_open_dialog_btn" class="i_help" style="
@@ -116,7 +115,7 @@
               border: none;
             "></button>
             </div>
-            <input type="text" id="cfg_ntp_tz" name="time_zone" />
+            <input type="text" appSendData="cfg_ntp_tz" name="time_zone" />
         </details>
         <!-- Dialog OPEN-NTP-HELP -->
         <dialog id="p12_ntp_dialog">
@@ -133,9 +132,9 @@
             <summary>{{ "geo_location" | translate }}</summary>
             <br />
             <label for="latitude">{{ "latitude" | translate }}</label>
-            <input type="number" id="cfg_geo_latitude" name="latitude" />
+            <input type="number" appSendData="cfg_geo_latitude" name="latitude" />
             <label for="longitude">{{ "longitude" | translate }}</label>
-            <input type="number" id="cfg_geo_longitude" name="longitude" />
+            <input type="number" appSendData="cfg_geo_longitude" name="longitude" />
             <div class="info-box">
                 <div class="info-icon">&#9432;</div>
                 <div class="info-text">{{ "geo_info" | translate }}</div>
@@ -148,28 +147,28 @@
             <div class="section-header">
                 <label for="mqtt_enable">{{ "activate" | translate }}</label>
                 <div class="switch-container">
-                    <input name="mqtt_enable" type="checkbox" role="switch" id="cfg_mqtt_enable" />
+                    <input name="mqtt_enable" type="checkbox" role="switch" appSendData="cfg_mqtt_enable" />
                 </div>
             </div>
             <div class="section-header">
                 <label for="mqtt_ha_enable">Home Assistant</label>
-                <input name="mqtt_ha_enable" type="checkbox" role="switch" id="cfg_mqtt_ha_enable" />
+                <input name="mqtt_ha_enable" type="checkbox" role="switch" appSendData="cfg_mqtt_ha_enable" />
             </div>
             <br />
             <label for="mqtt_server">{{ "server" | translate }}</label>
-            <input type="url" data-type="ip" oninput="validateIP(this)" id="cfg_mqtt_server" name="mqtt_server" />
+            <input type="url" data-type="ip" oninput="validateIP(this)" appSendData="cfg_mqtt_server" name="mqtt_server" />
             <label for="mqtt_port">{{ "port" | translate }}</label>
-            <input type="text" id="cfg_mqtt_port" name="mqtt_port" />
+            <input type="text" appSendData="cfg_mqtt_port" name="mqtt_port" />
             <label for="mqtt_topic">{{ "topic" | translate }}</label>
-            <input type="text" id="cfg_mqtt_topic" name="mqtt_topic" />
+            <input type="text" appSendData="cfg_mqtt_topic" name="mqtt_topic" />
             <label for="mqtt_user">{{ "user" | translate }}</label>
-            <input type="text" id="cfg_mqtt_user" name="mqtt_user" />
+            <input type="text" appSendData="cfg_mqtt_user" name="mqtt_user" />
             <label for="mqtt_password">{{ "password" | translate }}</label>
-            <input type="password" id="cfg_mqtt_password" name="mqtt_password" />
+            <input type="password" appSendData="cfg_mqtt_password" name="mqtt_password" />
             <label for="mqtt_ha_topic">Home Assistant Topic</label>
-            <input type="text" id="cfg_mqtt_ha_topic" placeholder="homeassistant" name="mqtt_ha_topic" />
+            <input type="text" appSendData="cfg_mqtt_ha_topic" placeholder="homeassistant" name="mqtt_ha_topic" />
             <label for="mqtt_ha_device">Home Assistant Device Name</label>
-            <input type="text" id="cfg_mqtt_ha_device" placeholder="jarolift" name="mqtt_ha_device" />
+            <input type="text" appSendData="cfg_mqtt_ha_device" placeholder="jarolift" name="mqtt_ha_device" />
         </details>
         <hr />
         <!-- Hardware -->
@@ -177,19 +176,19 @@
             <summary>{{ "gpio" | translate }}</summary>
             <br />
             <label for="gdo0">GDO0</label>
-            <input class="num-input" name="gdo0" type="number" id="cfg_gpio_gdo0" placeholder="-1 to disable" />
+            <input class="num-input" name="gdo0" type="number" appSendData="cfg_gpio_gdo0" placeholder="-1 to disable" />
             <label for="gdo2">GDO2</label>
-            <input class="num-input" name="gdo2" type="number" id="cfg_gpio_gdo2" placeholder="-1 to disable" />
+            <input class="num-input" name="gdo2" type="number" appSendData="cfg_gpio_gdo2" placeholder="-1 to disable" />
             <label for="sck">SCK</label>
-            <input class="num-input" name="sck" type="number" id="cfg_gpio_sck" placeholder="-1 to disable" />
+            <input class="num-input" name="sck" type="number" appSendData="cfg_gpio_sck" placeholder="-1 to disable" />
             <label for="miso">MISO</label>
-            <input class="num-input" name="miso" type="number" id="cfg_gpio_miso" placeholder="-1 to disable" />
+            <input class="num-input" name="miso" type="number" appSendData="cfg_gpio_miso" placeholder="-1 to disable" />
             <label for="mosi">MOSI</label>
-            <input class="num-input" name="mosi" type="number" id="cfg_gpio_mosi" placeholder="-1 to disable" />
+            <input class="num-input" name="mosi" type="number" appSendData="cfg_gpio_mosi" placeholder="-1 to disable" />
             <label for="cs">CS</label>
-            <input class="num-input" name="cs" type="number" id="cfg_gpio_cs" placeholder="-1 to disable" />
+            <input class="num-input" name="cs" type="number" appSendData="cfg_gpio_cs" placeholder="-1 to disable" />
             <label for="led_setup">{{ "led_setup" | translate }}</label>
-            <input class="num-input" name="led_setup" type="number" id="cfg_gpio_led_setup"
+            <input class="num-input" name="led_setup" type="number" appSendData="cfg_gpio_led_setup"
                 placeholder="-1 to disable" />
         </details>
         <hr />
@@ -199,7 +198,7 @@
             <div class="section-header">
                 <label for="learn_mode">{{ "learn_mode" | translate }}</label>
                 <div class="switch-container">
-                    <input type="checkbox" role="switch" id="cfg_jaro_learn_mode" />
+                    <input type="checkbox" role="switch" appSendData="cfg_jaro_learn_mode" />
                 </div>
             </div>
             <div class="info-box">
@@ -209,7 +208,7 @@
             <br />
             <label for="master_MSB">Master MSB (HEX-Format)</label>
             <div class="row">
-                <input name="master_MSB" type="text" data-type="hex" data-length="8" id="cfg_jaro_masterMSB"
+                <input name="master_MSB" type="text" data-type="hex" data-length="8" appSendData="cfg_jaro_masterMSB"
                     oninput="validateHex(this)" pattern="[0-9a-fA-F]{1,8}" title="Enter up to 8 HEX digits"
                     maxlength="8" onblur="formatHex(this)" disabled />
                 <button id="editBtn" onclick="toggleEdit(this, 'cfg_jaro_masterMSB')">
@@ -218,7 +217,7 @@
             </div>
             <label for="master_LSB">Master LSB (HEX-Format)</label>
             <div class="row">
-                <input name="master_LSB" type="text" data-type="hex" data-length="8" id="cfg_jaro_masterLSB"
+                <input name="master_LSB" type="text" data-type="hex" data-length="8" appSendData="cfg_jaro_masterLSB"
                     oninput="validateHex(this)" pattern="[0-9a-fA-F]{1,8}" title="Enter up to 8 HEX digits"
                     maxlength="8" onblur="formatHex(this)" disabled />
                 <button id="editBtn" onclick="toggleEdit(this, 'cfg_jaro_masterLSB')">
@@ -228,7 +227,7 @@
             <br />
             <label for="serial">{{ "serial_nr" | translate }} (HEX-Format)</label>
             <div class="row">
-                <input name="serial" type="text" data-type="hex" data-length="6" id="cfg_jaro_serial"
+                <input name="serial" type="text" data-type="hex" data-length="6" appSendData="cfg_jaro_serial"
                     oninput="validateHex(this)" pattern="[0-9a-fA-F]{1,6}" title="Enter up to 6 HEX digits"
                     maxlength="6" onblur="formatHex(this)" disabled />
                 <button id="editBtn" onclick="toggleEdit(this, 'cfg_jaro_serial')">
@@ -287,7 +286,7 @@
         <!-- Language -->
         <details>
             <summary>{{ "language" | translate }}</summary>
-            <select id="cfg_lang">
+            <select appSendData="cfg_lang">
                 <option value="0">{{ "german" | translate }}</option>
                 <option value="1">{{ "english" | translate }}</option>
             </select>

@@ -1,26 +1,27 @@
 <div class="section-header">
     <label for="remote_enable">{{ "remote" | translate }} {{ model.index + 1 }}</label>
     <div class="switch-container">
-        <input name="remote_enable" type="checkbox" role="switch" [value]="model.isEnabled" />
+        <input name="remote_enable" type="checkbox" role="switch" [(ngModel)]="model.isEnabled"[appSendData]="'cfg_jaro_remote_enable_' + model.index" />
     </div>
 </div>
 <br />
 <div class="settings-container">
     <div>
         <label for="name_remote">{{ "name" | translate }}</label>
-        <input name="name_remote" type="text" placeholder="name" [value]="model.name" />
+        <input name="name_remote" type="text" placeholder="name" [(ngModel)]="model.name" />
     </div>
     <div>
         <label for="serial_remote">{{ "serial_nr" | translate }}</label>
         <input name="serial_remote" type="text" data-type="hex"
             data-length="6" oninput="validateHex(this)" pattern="[0-9a-fA-F]{1,6}"
-            title="Enter up to 6 HEX digits" maxlength="6" onblur="formatHex(this)" placeholder="serial" [value]="model.serial" />
+            title="Enter up to 6 HEX digits" maxlength="6" onblur="formatHex(this)" placeholder="serial" [(ngModel)]="model.serial" [appSendData]="'cfg_jaro_remote_name_' + model.index" />
     </div>
     <div>
         <label for="mask_remote">{{ "mask" | translate }}</label>
         <input class="bitmask-input" name="mask_remote" type="text" data-type="bin"
             oninput="validateBin(this)" onblur="formatBin(this)"
-            pattern="[01]{1,16}" placeholder="click for Dialog" maxlength="16" [value]="model.bitmask" />
+            pattern="[01]{1,16}" placeholder="click for Dialog" maxlength="16" [(ngModel)]="model.bitmask"
+            [appSendData]="'cfg_jaro_remote_mask_' + model.index" />
     </div>
 </div>
 <hr />
