@@ -168,23 +168,11 @@ export class CommunicationService {
     }, 1000);
   }
 
-  private sendData(elementId, value) {
+  public sendData(elementId, value) {
     // check if the page is hosted on localhost or GitHub Pages
     if (this.isGitHubPages()) {
       console.log("localhost or github.io detected, skipping sendData");
       return;
-    }
-
-    // Find the element by its ID
-    const element = document.getElementById(elementId) as HTMLInputElement;
-
-    // Check if the element exists and is a password field
-    if (element && element.type === "password") {
-      // Only send the data if the value is not "XxXxXxXxXxX"
-      if (value === "XxXxXxXxXxX") {
-        console.log(`Password field (${elementId}) not updated, skipping send.`);
-        return;
-      }
     }
 
     if (this.ws.readyState === WebSocket.OPEN) {

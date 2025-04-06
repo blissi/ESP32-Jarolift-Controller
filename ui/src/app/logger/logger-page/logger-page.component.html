@@ -4,17 +4,17 @@
         <div class="dash-content" style="margin-bottom: 0px; flex-wrap: wrap">
             <button id="p10_log_clr_btn">{{ "clear" | translate }}</button>
             <button id="p10_log_refresh_btn">{{ "refresh" | translate }}</button>
-            <select id="cfg_logger_level" style="max-width: 390px; margin: 0px">
+            <select appSendData="cfg_logger_level" style="max-width: 390px; margin: 0px">
                 <option value="1">{{ "log_mode_1" | translate }}</option>
                 <option value="2">{{ "log_mode_2" | translate }}</option>
                 <option value="3">{{ "log_mode_3" | translate }}</option>
                 <option value="4">{{ "log_mode_4" | translate }}</option>
             </select>
-            <select id="cfg_logger_order" style="max-width: 220px; margin: 0px">
+            <select appSendData="cfg_logger_order" style="max-width: 220px; margin: 0px">
                 <option value="0">{{ "sort_down" | translate }}</option>
                 <option value="1">{{ "sort_up" | translate }}</option>
             </select>
-            <input name="log_enable" type="checkbox" role="switch" id="cfg_logger_enable" />
+            <input name="log_enable" type="checkbox" role="switch" appSendData="cfg_logger_enable" />
         </div>
         <hr />
         <div id="p10_log_output" style="

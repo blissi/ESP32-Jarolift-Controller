@@ -9,6 +9,7 @@ import { GroupSettingsComponent } from './group-settings/group-settings.componen
 import { MatDialogModule } from '@angular/material/dialog';
 import { SharedModule } from '../shared/shared.module';
 import { FormsModule } from '@angular/forms';
+import { SendDataDirective } from '../send-data.directive';
 
 const routes: Routes = [
   {path: "", component: SettingsPageComponent }
@@ -27,7 +28,8 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     TranslateModule.forChild(),
     MatDialogModule,
-    SharedModule
+    SharedModule,
+    SendDataDirective
   ]
 })
 export class SettingsModule { }
