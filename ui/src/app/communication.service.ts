@@ -11,10 +11,14 @@ const minReconnectDelay: number = 1000;
 })
 export class CommunicationService {
   private ws!: WebSocket;
-  private heartbeatTimeout?: NodeJS.Timeout;
+  private heartbeatTimeout?: ReturnType<typeof setTimeout>;
   private reconnectDelay: number = minReconnectDelay;
 
   constructor(private translateService: TranslateService) {
+    this.setupWS();
+  }
+
+  private setupWS(): void {
     if (this.isGitHubPages()) {
       console.log("localhost or github.io detected, skipping WebSocket setup");
       return;
@@ -90,7 +94,7 @@ export class CommunicationService {
     } else if (message.type === "logger") {
       this.logger(message);
     } else if (message.type === "cmdLogClr") {
-      this.cmdLogClr(message);
+      this.cmdLogClr();
     } else if (message.type === "otaProgress") {
       this.otaProgress(message);
     } else if (message.type === "updateDialog") {
@@ -111,8 +115,8 @@ export class CommunicationService {
   }
 
   private showMsgBar(message) {
-    const msgBar = document.getElementById("msgBar");
-    const msgBarText = document.getElementById("msgBarText");
+    const msgBar = document.getElementById("msgBar") as HTMLDivElement;
+    const msgBarText = document.getElementById("msgBarText") as HTMLDivElement;
 
     // update the message text
     msgBarText.textContent = message.text;
@@ -153,7 +157,7 @@ export class CommunicationService {
   }
 
   private restartFunction() {
-    const activeElement = document.activeElement;
+    const activeElement = document.activeElement as HTMLElement;
     if (activeElement && ["INPUT", "TEXTAREA"].includes(activeElement.tagName)) {
       activeElement.blur(); // save last active input
     }
@@ -172,7 +176,7 @@ export class CommunicationService {
     }
 
     // Find the element by its ID
-    const element = document.getElementById(elementId);
+    const element = document.getElementById(elementId) as HTMLInputElement;
 
     // Check if the element exists and is a password field
     if (element && element.type === "password") {
@@ -196,7 +200,7 @@ export class CommunicationService {
   }
 
   private updateText(data) {
-    var element = document.getElementById(data.id);
+    var element = document.getElementById(data.id) as HTMLInputElement;
     //console.log(element);
     if (element) {
       if (data.isInput) {
@@ -217,7 +221,7 @@ export class CommunicationService {
       if (key !== "type") {
         // skip first element "type"
         let elementID = key;
-        let element = document.getElementById(elementID);
+        let element = document.getElementById(elementID) as HTMLInputElement;
         if (!element) {
           console.error("unknown element:", key);
           return;
@@ -245,7 +249,7 @@ export class CommunicationService {
           element.value = value;
           // check if value is valid
           if (
-            !Array.from(element.options).some((option) => option.value === value)
+            !Array.from((element as any as HTMLSelectElement).options).some((option) => option.value === value)
           ) {
             console.warn(
               `Value "${value}" not found in <select> options for element:`,
@@ -259,14 +263,14 @@ export class CommunicationService {
           // all other elements with `innerHTML` (<td>, <div>, <span>, ...)
           element.innerHTML = value;
         } else {
-          console.error("unhandled element type:", element.tagName);
+          console.error("unhandled element type:", (element as any).tagName);
         }
       }
     });
   }
 
   private updateValue(data) {
-    var element = document.getElementById(data.id);
+    var element = document.getElementById(data.id) as HTMLInputElement;
     if (element) {
       if (data.isInput) {
         element.value = data.value;
@@ -276,10 +280,10 @@ export class CommunicationService {
 
   // update switch elements
   private updateState(data) {
-    var element = document.getElementById(data.id);
+    var element = document.getElementById(data.id) as HTMLInputElement;
     if (element && (element.type === "checkbox" || element.type === "radio")) {
       element.checked = data.state;
-      this.toggleElementVisibility(element.getAttribute("hideOpt"), element.checked);
+      this.toggleElementVisibility((element as any).getAttribute("hideOpt"), element.checked);
     }
   }
 
@@ -301,7 +305,7 @@ export class CommunicationService {
 
   // update href
   private updateHref(data) {
-    var element = document.getElementById(data.id);
+    var element = document.getElementById(data.id) as HTMLAnchorElement;
     if (element) {
       element.href = data.href;
     }
@@ -317,7 +321,7 @@ export class CommunicationService {
 
   // disable/enable element
   private updateDisabled(data) {
-    var element = document.getElementById(data.id);
+    var element = document.getElementById(data.id) as HTMLInputElement;
     if (element) {
       element.disabled = data.disabled;
     }
@@ -327,7 +331,7 @@ export class CommunicationService {
   private showElementClass(data) {
     const elements = document.querySelectorAll(`.${data.className}`);
     elements.forEach((element) => {
-      element.style.display = data.show ? "inline-flex" : "none";
+      (element as HTMLElement).style.display = data.show ? "inline-flex" : "none";
     });
   }
 
@@ -340,23 +344,27 @@ export class CommunicationService {
         logOutput.innerHTML += entry + "<br>";
       });
     } else if (data.cmd === "clr_log") {
-      logOutput.innerHTML = "";
+      this.cmdLogClr();
     }
+  }
+
+  // clear log
+  private cmdLogClr() {
+    const logOutput = document.getElementById("p10_log_output")!;
+    logOutput.innerHTML = "";
   }
 
   // update ota-progress bar
   private otaProgress(data) {
     clearTimeout(this.heartbeatTimeout);
     var progress = data.progress;
-    document.getElementById("ota_progress_bar")!.value = progress;
-    document.getElementById(
-      "ota_status_txt"
-    )!.textContent = `Update Progress: ${progress}%`;
+    (document.getElementById("ota_progress_bar") as HTMLProgressElement).value = progress;
+    document.getElementById("ota_status_txt")!.textContent = `Update Progress: ${progress}%`;
   }
 
   // close update dialog
   private updateDialog(data) {
-    var dialog = document.getElementById(data.id)!;
+    const dialog = document.getElementById(data.id) as HTMLDialogElement;
     if (data.state == "open") {
       dialog.showModal();
     } else if (data.state == "close") {
@@ -369,9 +377,9 @@ export class CommunicationService {
     const elements = document.querySelectorAll(`.${className}`);
     elements.forEach((element) => {
       if (element.tagName.toLowerCase() === "option") {
-        element.disabled = !isVisible;
+        (element as HTMLOptionElement).disabled = !isVisible;
       } else {
-        element.style.display = isVisible ? "" : "none";
+        (element as HTMLElement).style.display = isVisible ? "" : "none";
       }
     });
   }
@@ -383,7 +391,7 @@ export class CommunicationService {
       .forEach((switchElement) => {
         // Evaluate the status of the switch and adjust visibility
         this.toggleElementVisibility(
-          switchElement.getAttribute("hideOpt"),
+          (switchElement as any).getAttribute("hideOpt"),
           (switchElement as HTMLInputElement).checked
         );
       });
@@ -395,10 +403,10 @@ export class CommunicationService {
     console.log(a);
     var fileName = a.replace(/^.*[\\\/]/, "");
     console.log(fileName);
-    document.getElementById("ota_file_input").textContent = fileName;
-    document.getElementById("ota_update_btn").disabled = false;
-    document.getElementById("ota_progress_bar").style.display = "block";
-    document.getElementById("ota_status_txt").style.display = "block";
+    (document.getElementById("ota_file_input") as HTMLInputElement).textContent = fileName;
+    (document.getElementById("ota_update_btn") as HTMLButtonElement).disabled = false;
+    (document.getElementById("ota_progress_bar") as HTMLElement).style.display = "block";
+    (document.getElementById("ota_status_txt") as HTMLElement).style.display = "block";
   }
 
   // CONFIG-FORM: function for download config.json file
@@ -409,16 +417,6 @@ export class CommunicationService {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-  }
-
-  // to show reload bar if connection is lost
-  private showReloadBar() {
-    document.getElementById("connectionLostBar").style.display = "flex";
-  }
-
-  // to hide reload bar if connection is lost
-  private hideReloadBar() {
-    document.getElementById("connectionLostBar").style.display = "none";
   }
 
   private validateHex(input) {
@@ -450,7 +448,7 @@ export class CommunicationService {
       input.setAttribute("aria-invalid", "true");
     } else {
       input.setAttribute("aria-invalid", "false");
-      sendData(input.id, input.value);
+      this.sendData(input.id, input.value);
     }
   }
 
@@ -471,17 +469,17 @@ export class CommunicationService {
         // Überprüfen, ob das aktuelle Element ein verschachteltes Objekt ist
         if (typeof value === "object" && value !== null) {
           // Rekursiv weiter ins Objekt gehen, mit dem erweiterten Prefix
-          updateUI(value, elementId, ignoreKeys);
+          this.updateUI(value, elementId, ignoreKeys);
         } else {
           // UI-Element mit dem zusammengesetzten ID suchen
-          const element = document.getElementById(elementId);
+          const element = document.getElementById(elementId) as HTMLInputElement;
           if (element) {
             // Unterscheide die Art des HTML-Elements
             if (element.type === "checkbox") {
               // Setze das "checked"-Attribut für Checkboxen
               element.checked = value === true;
-              toggleElementVisibility(
-                element.getAttribute("hideOpt"),
+              this.toggleElementVisibility(
+                (element as any).getAttribute("hideOpt"),
                 element.checked
               );
             } else if (element.type === "radio") {
@@ -492,25 +490,25 @@ export class CommunicationService {
               element.value = value;
 
               // Prüfen, ob im globalen Scope eine Funktion updateUIcallbackSelect existiert
-              if (typeof window.updateUIcallbackSelect === "function") {
-                window.updateUIcallbackSelect(elementId, value);
+              if (typeof (window as any).updateUIcallbackSelect === "function") {
+                (window as any).updateUIcallbackSelect(elementId, value);
               }
             } else if (element.type === "password") {
               // Always set password fields to "XxXxXxXxXxX" as a placeholder
               element.value = "XxXxXxXxXxX";
             } else {
               // Überprüfen, ob das Feld ein HEX- oder Binärwert benötigt
-              if (element.dataset.type === "hex" && typeof value === "number") {
+              if (element.dataset["type"] === "hex" && typeof value === "number") {
                 // Konvertiere Zahl zu HEX und setze den Wert
                 element.value = value.toString(16).toLowerCase();
-                formatHex(element);
+                this.formatHex(element);
               } else if (
-                element.dataset.type === "bin" &&
+                element.dataset["type"] === "bin" &&
                 typeof value === "number"
               ) {
                 // Konvertiere Zahl zu Binär und setze den Wert
                 element.value = value.toString(2);
-                formatBin(element);
+                this.formatBin(element);
               } else {
                 // Setze den "value"-Attribut für andere Eingabetypen (z.B. text, number)
                 element.value = value;
@@ -522,7 +520,7 @@ export class CommunicationService {
         }
       }
     }
-    synchronizeDataSyncFields();
+    this.synchronizeDataSyncFields();
   }
 
   // load and update config
@@ -536,7 +534,7 @@ export class CommunicationService {
       const config = await response.json();
 
       // update UI-Elementes based on config.json
-      updateUI(config);
+      this.updateUI(config);
     } catch (error) {
       console.error("Error loading config:", error);
     }
@@ -544,11 +542,11 @@ export class CommunicationService {
 
   private synchronizeDataSyncFields() {
     // find all input fields with data-sync
-    const inputs = document.querySelectorAll("input[data-sync]");
+    const inputs = document.querySelectorAll("input[data-sync]") as any as HTMLInputElement[];
 
     inputs.forEach((inputElement) => {
       // split data-sync IDs by comma
-      const syncIds = inputElement.dataset.sync.split(",");
+      const syncIds = inputElement.dataset["sync"]?.split(",") || [];
 
       syncIds.forEach((syncId) => {
         const syncElement = document.getElementById(syncId.trim());
@@ -559,7 +557,7 @@ export class CommunicationService {
 
           // synchronize user inputs
           inputElement.addEventListener("input", (event) => {
-            syncElement.textContent = event.target.value;
+            syncElement.textContent = (event.target as HTMLInputElement).value;
           });
 
           // check for programmed changes
@@ -577,7 +575,7 @@ export class CommunicationService {
   }
 
   private toggleEdit(button, inputId) {
-    const input = document.getElementById(inputId);
+    const input = document.getElementById(inputId) as HTMLInputElement;
     console.log("button pressed");
     if (button.innerText === "Edit") {
       input.disabled = false;
