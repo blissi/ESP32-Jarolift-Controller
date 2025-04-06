@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { ShutterSettingsModel } from '../../settings/shutter-settings/shutter-settings.component';
+import { Shutter } from '../../shutter';
 
 @Component({
   standalone: false,
@@ -8,5 +8,5 @@ import { ShutterSettingsModel } from '../../settings/shutter-settings/shutter-se
   styleUrl: './channel.component.scss'
 })
 export class ChannelComponent {
-  @Input() shutter!: ShutterSettingsModel;
+  @Input() shutter!: Shutter;
 }

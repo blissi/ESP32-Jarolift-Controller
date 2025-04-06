@@ -1,14 +1,14 @@
 <div class="section-header">
     <label for="group_enable">{{ "group" | translate }} {{ model.index + 1 }}</label>
     <div class="switch-container">
-        <input name="group_enable" type="checkbox" role="switch" />
+        <input name="group_enable" type="checkbox" role="switch" [(ngModel)]="model.isEnabled" />
     </div>
 </div>
 <br />
 <div class="details-container">
     <div>
         <label for="name_grp">{{ "name" | translate }}</label>
-        <input name="name_grp" type="text" placeholder="name" [value]="model.name" />
+        <input name="name_grp" type="text" placeholder="name" [(ngModel)]="model.name" />
     </div>
     <div>
         <div class="label-with-button">
@@ -18,7 +18,7 @@
         <input class="bitmask-input" name="mask_grp" type="text" data-type="bin"
             (click)="onBitmaskClick()"
             oninput="validateBin(this)" onblur="formatBin(this)" pattern="[01]{1,16}"
-            placeholder="Enter Bit-Mask (0 and 1 only, 16 chars)" maxlength="16" [value]="model.bitmask" />
+            placeholder="Enter Bit-Mask (0 and 1 only, 16 chars)" maxlength="16" [(ngModel)]="model.bitmask" />
     </div>
 </div>
 <hr />
